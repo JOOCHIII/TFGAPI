@@ -5,6 +5,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,12 +28,6 @@ public class LoginActivity extends AppCompatActivity {
     TextView textviewRegistro, textviewAdmin;
     Button botoningresar;
     Connection con;
-
- /*   public LoginActivity() {
-        ConnectionDB instanceConnection = new ConnectionDB();
-        con = instanceConnection.connect();
-        aaaa
-    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,56 +78,91 @@ public class LoginActivity extends AppCompatActivity {
         String usuarioInput = usuario.getText().toString().trim();
         String contrasenaInput = contrasena.getText().toString().trim();
         String origenApp = "tienda";  // Definir el origen de la app
+        if (usuarioInput.isEmpty() && contrasenaInput.isEmpty()) {
+            runOnUiThread(() ->
+                    Toast.makeText(this, "Por favor, introduce el usuario y la contraseña", Toast.LENGTH_SHORT).show()
+            );
+            return;
+        }
 
-        // Crear instancia de la API
-        UsuarioApi usuarioApi = RetrofitClient.getRetrofitInstance().create(UsuarioApi.class);
+        if (usuarioInput.isEmpty()) {
+            runOnUiThread(() ->
+                    Toast.makeText(this, "El campo usuario está vacío", Toast.LENGTH_SHORT).show()
+            );
+            return;
+        }
 
-        // Llamada a la API para hacer login
-        Call<String> call = usuarioApi.login(usuarioInput, contrasenaInput, origenApp);
+        if (contrasenaInput.isEmpty()) {
+            runOnUiThread(() ->
+                    Toast.makeText(this, "El campo contraseña está vacío", Toast.LENGTH_SHORT).show()
+            );
+            return;
+        }
 
-        // Ejecutar la llamada de forma asíncrona
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    String resultado = response.body();
+        runOnUiThread(() -> {
+            ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+            progressDialog.setMessage("Iniciando sesión...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
 
-                    // Evaluar la respuesta del servidor
-                    switch (resultado) {
-                        case "ACCESO_CONCEDIDO":
-                            Toast.makeText(LoginActivity.this, "Acceso exitoso", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.putExtra("nombre_usuario", usuarioInput);
-                            startActivity(intent);
-                            break;
+            // Crear instancia de la API
+            UsuarioApi usuarioApi = RetrofitClient.getRetrofitInstance().create(UsuarioApi.class);
 
-                        case "CONTRASENA_INCORRECTA":
-                            Toast.makeText(LoginActivity.this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
-                            break;
+            // Llamada a la API para hacer login
+            Call<String> call = usuarioApi.login(usuarioInput, contrasenaInput, origenApp);
 
-                        case "USUARIO_NO_EXISTE":
-                            Toast.makeText(LoginActivity.this, "El usuario no existe", Toast.LENGTH_SHORT).show();
-                            break;
+            // Ejecutar la llamada de forma asíncrona
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    // Cerrar el ProgressDialog una vez que se reciba la respuesta
+                    progressDialog.dismiss();
 
-                        case "ACCESO_DENEGADO_ORIGEN_APP":
-                            Toast.makeText(LoginActivity.this, "Acceso denegado desde esta app", Toast.LENGTH_SHORT).show();
-                            break;
+                    if (response.isSuccessful() && response.body() != null) {
+                        String resultado = response.body();
 
-                        default:
-                            Toast.makeText(LoginActivity.this, "Respuesta desconocida: " + resultado, Toast.LENGTH_SHORT).show();
-                            break;
+                        // Evaluar la respuesta del servidor
+                        switch (resultado) {
+                            case "ACCESO_CONCEDIDO":
+                                Toast.makeText(LoginActivity.this, "Acceso exitoso", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.putExtra("nombre_usuario", usuarioInput);
+                                startActivity(intent);
+                                break;
+
+                            case "CONTRASENA_INCORRECTA":
+                                Toast.makeText(LoginActivity.this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                                break;
+
+                            case "USUARIO_NO_EXISTE":
+                                Toast.makeText(LoginActivity.this, "El usuario no existe", Toast.LENGTH_SHORT).show();
+                                break;
+
+                            case "ACCESO_DENEGADO_ORIGEN_APP":
+                                Toast.makeText(LoginActivity.this, "Acceso denegado desde esta app", Toast.LENGTH_SHORT).show();
+                                break;
+
+                            default:
+                                Toast.makeText(LoginActivity.this, "Respuesta desconocida: " + resultado, Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Error en la respuesta del servidor", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(LoginActivity.this, "Error en la respuesta del servidor", Toast.LENGTH_SHORT).show();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    // Cerrar el ProgressDialog en caso de fallo de conexión
+                    progressDialog.dismiss();
+                    Toast.makeText(LoginActivity.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
         });
+
     }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -140,6 +170,4 @@ public class LoginActivity extends AppCompatActivity {
         usuario.setText("");
         contrasena.setText("");
     }
-
-
 }

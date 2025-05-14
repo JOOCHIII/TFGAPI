@@ -37,59 +37,77 @@ public class RegistroActivity extends AppCompatActivity {
 
         usuarioApi = RetrofitClient.getRetrofitInstance().create(UsuarioApi.class);
 
-        registrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                registrarUsuario();
-            }
-        });
+        registrar.setOnClickListener(view -> registrarUsuario());
 
-        ingresar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent ingresar = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(ingresar);
-                finish();
-            }
+        ingresar.setOnClickListener(view -> {
+            Intent ingresar = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(ingresar);
+            finish();
         });
     }
 
     private void registrarUsuario() {
+        String nombreCompleto = nombreapellidos.getText().toString().trim();
         String correoInput = email.getText().toString().trim();
-        if (!correoInput.contains("@")) {
-            Toast.makeText(this, "El correo debe contener @", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Validar contraseñas
+        String telefonoInput = telefono.getText().toString().trim();
+        String usuarioInput = usuario.getText().toString().trim();
         String password = clave.getText().toString();
         String confirmPassword = confirmaclave.getText().toString();
-        if (!password.equals(confirmPassword)) {
-            Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+
+        // Validaciones de campos vacíos
+        if (nombreCompleto.isEmpty() || correoInput.isEmpty() || telefonoInput.isEmpty()
+                || usuarioInput.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            showToast("Por favor, rellena todos los campos");
             return;
         }
 
-        // Definir el origen de la app
+        // Validaciones específicas
+        if (usuarioInput.length() < 3) {
+            showToast("El usuario debe tener al menos 3 caracteres");
+            return;
+        }
+
+        if (!correoInput.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            showToast("El correo debe ser válido");
+            return;
+        }
+
+        if (!telefonoInput.matches("\\d{9}")) {
+            showToast("El teléfono debe tener 9 dígitos numéricos");
+            return;
+        }
+
+        if (!password.equals(confirmPassword)) {
+            showToast("Las contraseñas no coinciden");
+            return;
+        }
+
+        // Puedes activar estas validaciones avanzadas si quieres reforzar aún más
+
+        if (password.length() < 8 || !password.matches(".*[A-Z].*")
+                || !password.matches(".*[a-z].*") || !password.matches(".*\\d.*")
+                || !password.matches(".*[!@#$%^&*()_+=<>?/{}~\\-].*") || password.contains(" ")) {
+            showToast("La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas, números y un carácter especial, y no contener espacios");
+            return;
+        }
+
         String origenApp = "tienda";
 
-        // Llamar a la API para registrar el usuario
         Call<String> call = usuarioApi.registrarUsuario(
-                nombreapellidos.getText().toString().trim(),
+                nombreCompleto,
                 correoInput,
-                telefono.getText().toString().trim(),
-                usuario.getText().toString().trim(),
+                telefonoInput,
+                usuarioInput,
                 password,
                 origenApp
         );
 
-        // Ejecutar la llamada de forma asíncrona
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
                     String mensaje = response.body();
                     Toast.makeText(RegistroActivity.this, mensaje, Toast.LENGTH_SHORT).show();
-
                     if ("Usuario registrado correctamente".equals(mensaje)) {
                         limpiarCampos();
                     }
@@ -103,6 +121,10 @@ public class RegistroActivity extends AppCompatActivity {
                 Toast.makeText(RegistroActivity.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showToast(String mensaje) {
+        runOnUiThread(() -> Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show());
     }
 
     private void limpiarCampos() {

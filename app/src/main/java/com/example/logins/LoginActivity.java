@@ -4,13 +4,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import android.app.ProgressDialog;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText usuario, contrasena;
     TextView textviewRegistro, textviewAdmin;
     Button botoningresar;
+    AlertDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,26 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void showProgressDialog() {
+        runOnUiThread(() -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+            LayoutInflater inflater = getLayoutInflater();
+            View view = inflater.inflate(R.layout.dialog_progress, null);
+            builder.setView(view);
+            builder.setCancelable(false);
+            progressDialog = builder.create();
+            progressDialog.show();
+        });
+    }
+
+    private void hideProgressDialog() {
+        runOnUiThread(() -> {
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        });
+    }
+
     private void login() {
         String usuarioInput = usuario.getText().toString().trim();
         String contrasenaInput = contrasena.getText().toString().trim();
@@ -65,74 +88,61 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        runOnUiThread(() -> {
-            ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
-            progressDialog.setMessage("Iniciando sesión...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+        showProgressDialog();
 
-            UsuarioApi usuarioApi = RetrofitClient.getRetrofitInstance().create(UsuarioApi.class);
-            Call<LoginResponse> call = usuarioApi.login(usuarioInput, contrasenaInput, origenApp);
+        UsuarioApi usuarioApi = RetrofitClient.getRetrofitInstance().create(UsuarioApi.class);
+        Call<LoginResponse> call = usuarioApi.login(usuarioInput, contrasenaInput, origenApp);
 
-            call.enqueue(new Callback<LoginResponse>() {
-                @Override
-                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                    progressDialog.dismiss();
+        call.enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                hideProgressDialog();
 
-                    if (response.isSuccessful() && response.body() != null) {
-                        LoginResponse loginResponse = response.body();
-                        // AÑADE ESTOS LOGS PARA VER QUÉ LLEGA
-                        Log.d("LOGIN_DEBUG", "ID recibido: " + loginResponse.getId());
-                        Log.d("LOGIN_DEBUG", "Usuario recibido: " + loginResponse.getUsuario());
-                        Log.d("LOGIN_DEBUG", "Mensaje recibido: " + loginResponse.getMensaje());
+                if (response.isSuccessful() && response.body() != null) {
+                    LoginResponse loginResponse = response.body();
 
+                    switch (loginResponse.getMensaje()) {
+                        case "ACCESO_CONCEDIDO":
+                            Toast.makeText(LoginActivity.this, "Acceso exitoso", Toast.LENGTH_SHORT).show();
 
-                        switch (loginResponse.getMensaje()) {
-                            case "ACCESO_CONCEDIDO":
-                                Toast.makeText(LoginActivity.this, "Acceso exitoso", Toast.LENGTH_SHORT).show();
+                            SharedPreferences preferences = getSharedPreferences("usuario_prefs", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putLong("id_usuario", loginResponse.getId());
+                            editor.putString("nombre_usuario", loginResponse.getUsuario());
+                            editor.apply();
 
-                                // Guardar en SharedPreferences
-                                SharedPreferences preferences = getSharedPreferences("usuario_prefs", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = preferences.edit();
-                                editor.putLong("id_usuario", loginResponse.getId());
-                                editor.putString("nombre_usuario", loginResponse.getUsuario());
-                                editor.apply();
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            break;
 
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                break;
+                        case "CONTRASENA_INCORRECTA":
+                            Toast.makeText(LoginActivity.this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                            break;
 
-                            case "CONTRASENA_INCORRECTA":
-                                Toast.makeText(LoginActivity.this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
-                                break;
+                        case "USUARIO_NO_EXISTE":
+                            Toast.makeText(LoginActivity.this, "El usuario no existe", Toast.LENGTH_SHORT).show();
+                            break;
 
-                            case "USUARIO_NO_EXISTE":
-                                Toast.makeText(LoginActivity.this, "El usuario no existe", Toast.LENGTH_SHORT).show();
-                                break;
+                        case "ACCESO_DENEGADO_ORIGEN_APP":
+                            Toast.makeText(LoginActivity.this, "Acceso denegado desde esta app", Toast.LENGTH_SHORT).show();
+                            break;
 
-                            case "ACCESO_DENEGADO_ORIGEN_APP":
-                                Toast.makeText(LoginActivity.this, "Acceso denegado desde esta app", Toast.LENGTH_SHORT).show();
-                                break;
-
-                            default:
-                                Toast.makeText(LoginActivity.this, "Error desconocido", Toast.LENGTH_SHORT).show();
-                                break;
-                        }
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Error en la respuesta del servidor", Toast.LENGTH_SHORT).show();
+                        default:
+                            Toast.makeText(LoginActivity.this, "Error desconocido", Toast.LENGTH_SHORT).show();
+                            break;
                     }
+                } else {
+                    Toast.makeText(LoginActivity.this, "Error en la respuesta del servidor", Toast.LENGTH_SHORT).show();
                 }
+            }
 
-
-                @Override
-                public void onFailure(Call<LoginResponse> call, Throwable t) {
-                    progressDialog.dismiss();
-                    Toast.makeText(LoginActivity.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                hideProgressDialog();
+                Toast.makeText(LoginActivity.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
-
 
     @Override
     protected void onResume() {

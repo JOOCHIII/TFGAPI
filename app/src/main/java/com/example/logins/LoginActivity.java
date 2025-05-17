@@ -1,15 +1,14 @@
 package com.example.logins;
 
-import Connection.ConnectionDB;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,9 +16,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -27,75 +23,45 @@ public class LoginActivity extends AppCompatActivity {
     EditText usuario, contrasena;
     TextView textviewRegistro, textviewAdmin;
     Button botoningresar;
-    Connection con;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        usuario = (EditText) findViewById(R.id.usuario);
-        contrasena = (EditText) findViewById(R.id.contrasena);
-        textviewRegistro = (TextView) findViewById(R.id.textviewRegistro);
-        textviewAdmin = (TextView) findViewById(R.id.textviewAdmin);
-        botoningresar = (Button) findViewById(R.id.botoniniciarsesion);
+        usuario = findViewById(R.id.usuario);
+        contrasena = findViewById(R.id.contrasena);
+        textviewRegistro = findViewById(R.id.textviewRegistro);
+        textviewAdmin = findViewById(R.id.textviewAdmin);
+        botoningresar = findViewById(R.id.botoniniciarsesion);
 
-        // Crear un ExecutorService para manejar el hilo en segundo plano
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-        botoningresar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                executorService.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        login();
-                    }
-                });
-            }
+        botoningresar.setOnClickListener(v -> executorService.execute(this::login));
+
+        textviewRegistro.setOnClickListener(v -> {
+            Intent registro = new Intent(getApplicationContext(), RegistroActivity.class);
+            startActivity(registro);
         });
 
-        textviewRegistro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent registro = new Intent(getApplicationContext(), RegistroActivity.class);
-                startActivity(registro);
-            }
-        });
-
-        textviewAdmin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent admin = new Intent(getApplicationContext(), LoginAdminActivity.class);
-                startActivity(admin);
-            }
+        textviewAdmin.setOnClickListener(v -> {
+            Intent admin = new Intent(getApplicationContext(), LoginAdminActivity.class);
+            startActivity(admin);
         });
     }
 
-    // Método de login, ahora reemplazado sin AsyncTask
     private void login() {
-        // Obtener valores introducidos por el usuario
         String usuarioInput = usuario.getText().toString().trim();
         String contrasenaInput = contrasena.getText().toString().trim();
-        String origenApp = "tienda";  // Definir el origen de la app
-        if (usuarioInput.isEmpty() && contrasenaInput.isEmpty()) {
-            runOnUiThread(() ->
-                    Toast.makeText(this, "Por favor, introduce el usuario y la contraseña", Toast.LENGTH_SHORT).show()
-            );
-            return;
-        }
+        String origenApp = "tienda";
 
         if (usuarioInput.isEmpty()) {
-            runOnUiThread(() ->
-                    Toast.makeText(this, "El campo usuario está vacío", Toast.LENGTH_SHORT).show()
-            );
+            runOnUiThread(() -> Toast.makeText(this, "El campo usuario está vacío", Toast.LENGTH_SHORT).show());
             return;
         }
 
         if (contrasenaInput.isEmpty()) {
-            runOnUiThread(() ->
-                    Toast.makeText(this, "El campo contraseña está vacío", Toast.LENGTH_SHORT).show()
-            );
+            runOnUiThread(() -> Toast.makeText(this, "El campo contraseña está vacío", Toast.LENGTH_SHORT).show());
             return;
         }
 
@@ -105,28 +71,34 @@ public class LoginActivity extends AppCompatActivity {
             progressDialog.setCancelable(false);
             progressDialog.show();
 
-            // Crear instancia de la API
             UsuarioApi usuarioApi = RetrofitClient.getRetrofitInstance().create(UsuarioApi.class);
+            Call<LoginResponse> call = usuarioApi.login(usuarioInput, contrasenaInput, origenApp);
 
-            // Llamada a la API para hacer login
-            Call<String> call = usuarioApi.login(usuarioInput, contrasenaInput, origenApp);
-
-            // Ejecutar la llamada de forma asíncrona
-            call.enqueue(new Callback<String>() {
+            call.enqueue(new Callback<LoginResponse>() {
                 @Override
-                public void onResponse(Call<String> call, Response<String> response) {
-                    // Cerrar el ProgressDialog una vez que se reciba la respuesta
+                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                     progressDialog.dismiss();
 
                     if (response.isSuccessful() && response.body() != null) {
-                        String resultado = response.body();
+                        LoginResponse loginResponse = response.body();
+                        // AÑADE ESTOS LOGS PARA VER QUÉ LLEGA
+                        Log.d("LOGIN_DEBUG", "ID recibido: " + loginResponse.getId());
+                        Log.d("LOGIN_DEBUG", "Usuario recibido: " + loginResponse.getUsuario());
+                        Log.d("LOGIN_DEBUG", "Mensaje recibido: " + loginResponse.getMensaje());
 
-                        // Evaluar la respuesta del servidor
-                        switch (resultado) {
+
+                        switch (loginResponse.getMensaje()) {
                             case "ACCESO_CONCEDIDO":
                                 Toast.makeText(LoginActivity.this, "Acceso exitoso", Toast.LENGTH_SHORT).show();
+
+                                // Guardar en SharedPreferences
+                                SharedPreferences preferences = getSharedPreferences("usuario_prefs", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putLong("id_usuario", loginResponse.getId());
+                                editor.putString("nombre_usuario", loginResponse.getUsuario());
+                                editor.apply();
+
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.putExtra("nombre_usuario", usuarioInput);
                                 startActivity(intent);
                                 break;
 
@@ -143,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
                                 break;
 
                             default:
-                                Toast.makeText(LoginActivity.this, "Respuesta desconocida: " + resultado, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Error desconocido", Toast.LENGTH_SHORT).show();
                                 break;
                         }
                     } else {
@@ -151,22 +123,20 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
 
+
                 @Override
-                public void onFailure(Call<String> call, Throwable t) {
-                    // Cerrar el ProgressDialog en caso de fallo de conexión
+                public void onFailure(Call<LoginResponse> call, Throwable t) {
                     progressDialog.dismiss();
                     Toast.makeText(LoginActivity.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         });
-
     }
+
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        // Limpiar los campos al volver al login
         usuario.setText("");
         contrasena.setText("");
     }

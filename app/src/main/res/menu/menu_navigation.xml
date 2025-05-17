@@ -12,6 +12,14 @@
             android:title="Configuración"
             android:icon="@drawable/baseline_settings_24" />
         <item
+            android:id="@+id/nav_reports"
+            android:title="Reportes"
+            android:icon="@drawable/baseline_warning_24" />
+            <item
+                android:id="@+id/nav_notifications"
+                android:title="Notificaciones"
+                android:icon="@drawable/baseline_notifications_24" />
+        <item
             android:id="@+id/nav_logout"
             android:title="Cerrar sesión"
             android:icon="@drawable/baseline_exit_to_app_24" />

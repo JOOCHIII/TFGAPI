@@ -20,7 +20,7 @@
         <activity
             android:name=".RegistroActivity"
             android:exported="true" />
-        <activity android:name=".MainActivityAdmin"
+        <activity android:name=".fragmentosAdmin.MainActivityAdmin"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

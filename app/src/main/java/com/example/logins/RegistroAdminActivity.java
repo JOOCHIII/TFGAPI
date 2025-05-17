@@ -1,4 +1,4 @@
-/*package com.example.logins;
+package com.example.logins;/*package com.example.logins;
 
 import android.os.Bundle;
 import android.widget.Button;

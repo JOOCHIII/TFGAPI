@@ -1,4 +1,4 @@
-package com.example.logins;
+package com.logins;
 
 import android.content.Context;
 

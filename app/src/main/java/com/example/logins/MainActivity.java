@@ -94,7 +94,8 @@ public class MainActivity extends AppCompatActivity {
         String nombreUsuario = preferences.getString("nombre_usuario", "Usuario");
 
         Log.d("MAIN_DEBUG", "ID cargado en MainActivity: " + idUsuario);
-        Toast.makeText(this, "Tu ID es: " + idUsuario, Toast.LENGTH_SHORT).show();
+
+
 
         textoBienvenida.setText("Bienvenido, " + nombreUsuario);
     }

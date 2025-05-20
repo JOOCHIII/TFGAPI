@@ -1,6 +1,7 @@
 package com.example.logins;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -90,14 +91,15 @@ public class MainActivityAdmin extends AppCompatActivity {
         View headerView_admin = navigationView.getHeaderView(0);
         textoBienvenida_admin = headerView_admin.findViewById(R.id.textoBienvenida_admin);
 
-        // Mostrar nombre de usuario admin en el header
-        String nombreUsuarioAdmin = getIntent().getStringExtra("nombre_Admin");
-        if (nombreUsuarioAdmin != null && !nombreUsuarioAdmin.isEmpty()) {
-            textoBienvenida_admin.setText("Bienvenido, " + nombreUsuarioAdmin);
-        }
+        SharedPreferences preferences = getSharedPreferences("admin_prefs", MODE_PRIVATE);
+        String nombreUsuarioAdmin = preferences.getString("nombre_admin", "Administrador");
+
+        textoBienvenida_admin.setText("Bienvenido, " + nombreUsuarioAdmin);
+
+    }
 
 
 
 
     }
-}
+

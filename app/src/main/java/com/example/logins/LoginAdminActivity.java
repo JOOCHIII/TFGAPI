@@ -1,6 +1,7 @@
 package com.example.logins;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,6 +12,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.logins.AdministradorApi;
+import com.example.logins.LoginResponse;
+import com.example.logins.R;
 import com.google.android.material.button.MaterialButton;
 
 import retrofit2.Call;
@@ -64,65 +68,65 @@ public class LoginAdminActivity extends AppCompatActivity {
         }
     }
 
-    private void iniciarSesionAdmin() {
+    public void iniciarSesionAdmin() {
         String usuario = usuarioAdmin.getText().toString().trim();
         String clave = contrasenaAdmin.getText().toString().trim();
         String origenApp = "tienda";
 
-        if (usuario.isEmpty() || clave.isEmpty()) {
-            Toast.makeText(this, "Rellena todos los campos", Toast.LENGTH_SHORT).show();
+        if (usuario.isEmpty() && clave.isEmpty()) {
+            Toast.makeText(this, "Por favor, introduce el usuario y la contraseña", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        showProgressDialog();
+        if (usuario.isEmpty()) {
+            Toast.makeText(this, "El campo usuario está vacío", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        Call<String> call = administradorApi.loginAdmin(usuario, clave, origenApp);
-        call.enqueue(new Callback<String>() {
+        if (clave.isEmpty()) {
+            Toast.makeText(this, "El campo contraseña está vacío", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ProgressDialog progressDialog = new ProgressDialog(LoginAdminActivity.this);
+        progressDialog.setMessage("Iniciando sesión...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        Call<LoginResponse> call = administradorApi.loginAdmin(usuario, clave, origenApp);
+        call.enqueue(new Callback<LoginResponse>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                hideProgressDialog();
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                progressDialog.dismiss();
 
                 if (response.isSuccessful() && response.body() != null) {
-                    String resultado = response.body();
+                    LoginResponse loginResponse = response.body();
 
-                    switch (resultado) {
-                        case "ACCESO_CONCEDIDO":
-                            Toast.makeText(LoginAdminActivity.this, "Inicio de sesión exitoso como administrador", Toast.LENGTH_SHORT).show();
+                    if ("ACCESO_CONCEDIDO".equals(loginResponse.getMensaje())) {
+                        Toast.makeText(LoginAdminActivity.this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
 
-                            SharedPreferences prefs = getSharedPreferences("MisPreferencias", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = prefs.edit();
-                            editor.putString("nombre_Admin", usuario);
-                            editor.apply();
+                        SharedPreferences prefs = getSharedPreferences("admin_prefs", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("nombre_admin", loginResponse.getUsuario());
+                        editor.putLong("id_admin", loginResponse.getId()); // ← ESTA LÍNEA
+                        editor.apply();
 
-                            Intent intent = new Intent(LoginAdminActivity.this, MainActivityAdmin.class);
-                            intent.putExtra("nombre_Admin", usuario);
-                            startActivity(intent);
-                            finish();
-                            break;
 
-                        case "USUARIO_NO_ENCONTRADO":
-                            Toast.makeText(LoginAdminActivity.this, "El usuario no existe", Toast.LENGTH_SHORT).show();
-                            break;
-
-                        case "CONTRASENA_INCORRECTA":
-                            Toast.makeText(LoginAdminActivity.this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
-                            break;
-
-                        default:
-                            Toast.makeText(LoginAdminActivity.this, "Error: " + resultado, Toast.LENGTH_SHORT).show();
-                            break;
+                        Intent intent = new Intent(LoginAdminActivity.this, MainActivityAdmin.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(LoginAdminActivity.this, "Error: " + loginResponse.getMensaje(), Toast.LENGTH_SHORT).show();
                     }
-
                 } else {
-                    Toast.makeText(LoginAdminActivity.this, "Error de respuesta del servidor", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginAdminActivity.this, "Error en la respuesta del servidor", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                hideProgressDialog();
-                Toast.makeText(LoginAdminActivity.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("LOGIN_API_ERROR", t.getMessage(), t);
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(LoginAdminActivity.this, "Error de red: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

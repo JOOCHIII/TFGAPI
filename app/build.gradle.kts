@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(files("libs\\jtds-1.3.1.jar"))
     implementation(files("libs\\mysql-connector-j-9.1.0.jar"))
+    implementation(libs.swiperefreshlayout)
 
 
     testImplementation(libs.junit)

@@ -1,5 +1,8 @@
 package com.example.logins;
 
+import static java.security.AccessController.getContext;
+
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +15,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,10 +30,12 @@ public class ReportsFragment extends Fragment {
 
     private EditText edtAsunto, edtDescripcion;
     private Button btnEnviarReporte;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private RecyclerView rvReportes;
 
-    private long idUsuario = -1; // valor inicial inválido
-
+    private long idUsuario = -1;
     private ReportesNotisApi reportesNotisApi;
+    private ReporteAdapter reporteAdapter;
 
     @Nullable
     @Override
@@ -36,9 +47,11 @@ public class ReportsFragment extends Fragment {
         edtAsunto = view.findViewById(R.id.edtAsunto);
         edtDescripcion = view.findViewById(R.id.edtDescripcion);
         btnEnviarReporte = view.findViewById(R.id.btnEnviarReporte);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefresh);
+        rvReportes = view.findViewById(R.id.rvReportes);
 
-        // Leer idUsuario desde SharedPreferences
-        SharedPreferences preferences = requireActivity().getSharedPreferences("usuario_prefs", getActivity().MODE_PRIVATE);
+        // Obtener idUsuario desde SharedPreferences
+        SharedPreferences preferences = requireActivity().getSharedPreferences("usuario_prefs", Context.MODE_PRIVATE);
         idUsuario = preferences.getLong("id_usuario", -1);
 
         if (idUsuario == -1) {
@@ -48,7 +61,15 @@ public class ReportsFragment extends Fragment {
 
         reportesNotisApi = RetrofitClient.getReportesNotisApi();
 
+        rvReportes.setLayoutManager(new LinearLayoutManager(getContext()));
+        reporteAdapter = new ReporteAdapter(new ArrayList<>());
+        rvReportes.setAdapter(reporteAdapter);
+
         btnEnviarReporte.setOnClickListener(v -> enviarReporte());
+
+        swipeRefreshLayout.setOnRefreshListener(this::cargarReportes);
+
+        cargarReportes();
 
         return view;
     }
@@ -81,6 +102,7 @@ public class ReportsFragment extends Fragment {
                 if (response.isSuccessful()) {
                     Toast.makeText(getContext(), "Reporte enviado correctamente", Toast.LENGTH_LONG).show();
                     limpiarFormulario();
+                    cargarReportes();
                 } else {
                     Toast.makeText(getContext(), "Error: " + response.message(), Toast.LENGTH_LONG).show();
                 }
@@ -96,5 +118,28 @@ public class ReportsFragment extends Fragment {
     private void limpiarFormulario() {
         edtAsunto.setText("");
         edtDescripcion.setText("");
+    }
+
+    private void cargarReportes() {
+        swipeRefreshLayout.setRefreshing(true);
+
+        Call<List<ReporteDTO>> call = reportesNotisApi.obtenerReportesPorUsuario(idUsuario);
+        call.enqueue(new Callback<List<ReporteDTO>>() {
+            @Override
+            public void onResponse(Call<List<ReporteDTO>> call, Response<List<ReporteDTO>> response) {
+                swipeRefreshLayout.setRefreshing(false);
+                if (response.isSuccessful() && response.body() != null) {
+                    reporteAdapter.actualizarLista(response.body());
+                } else {
+                    Toast.makeText(getContext(), "Error al cargar reportes", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ReporteDTO>> call, Throwable t) {
+                swipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

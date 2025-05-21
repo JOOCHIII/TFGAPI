@@ -1,11 +1,14 @@
 package com.example.logins;
 
+import com.google.gson.annotations.SerializedName;
+
 public class ReporteDTO {
     private long idUsuario;
     private String asunto;
     private String descripcion;
     private String estado;
     private String nombreAsignado;
+    @SerializedName("fecha")
     private String fecha; // Puedes usar String si no vas a parsear a Date
 
     public ReporteDTO() {

@@ -4,6 +4,12 @@ public class ReporteDTO {
     private long idUsuario;
     private String asunto;
     private String descripcion;
+    private String estado;
+    private String nombreAsignado;
+    private String fecha; // Puedes usar String si no vas a parsear a Date
+
+    public ReporteDTO() {
+    }
 
     public ReporteDTO(long idUsuario, String asunto, String descripcion) {
         this.idUsuario = idUsuario;
@@ -11,11 +17,7 @@ public class ReporteDTO {
         this.descripcion = descripcion;
     }
 
-    public ReporteDTO() {
-
-    }
-
-    // Getters y setters (puedes generar con el IDE)
+    // Getters y Setters
     public long getIdUsuario() {
         return idUsuario;
     }
@@ -38,5 +40,29 @@ public class ReporteDTO {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getNombreAsignado() {
+        return nombreAsignado;
+    }
+
+    public void setNombreAsignado(String nombreAsignado) {
+        this.nombreAsignado = nombreAsignado;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 }

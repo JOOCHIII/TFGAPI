@@ -8,7 +8,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class NotificacionesAdapter extends RecyclerView.Adapter<NotificacionesAdapter.ViewHolder> {
 
@@ -34,13 +37,25 @@ public class NotificacionesAdapter extends RecyclerView.Adapter<NotificacionesAd
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Notificacion noti = notificaciones.get(position);
         holder.mensaje.setText(noti.getMensaje());
-        holder.fecha.setText(noti.getFecha());
-        // Puedes añadir más campos y formato si quieres
+
+        String fechaOriginal = noti.getFecha(); // Ejemplo: "2024-05-21T22:35:00"
+        String fechaFormateada = "";
+        try {
+            SimpleDateFormat formatoEntrada = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+            Date fecha = formatoEntrada.parse(fechaOriginal);
+
+            SimpleDateFormat formatoSalida = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
+            fechaFormateada = formatoSalida.format(fecha);
+        } catch (Exception e) {
+            fechaFormateada = fechaOriginal; // Si falla, muestra la original
+        }
+
+        holder.fecha.setText(fechaFormateada);
     }
 
     @Override
     public int getItemCount() {
-        return notificaciones.size();
+        return notificaciones != null ? notificaciones.size() : 0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

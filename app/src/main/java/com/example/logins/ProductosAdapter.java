@@ -1,0 +1,118 @@
+package com.example.logins;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.ImageView;
+import android.widget.TextView;
+// otros imports...
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.ProductoViewHolder> implements Filterable {
+
+    private List<Productos> productosList;       // lista filtrada para mostrar
+    private List<Productos> productosListFull;   // copia original completa
+    private OnItemClickListener listener;
+
+    public interface OnItemClickListener {
+        void onItemClick(Productos producto);
+    }
+
+    public ProductosAdapter(List<Productos> productosList, OnItemClickListener listener) {
+        this.productosList = productosList;
+        this.productosListFull = new ArrayList<>(productosList); // copia para filtrar
+        this.listener = listener;
+    }
+
+    @NonNull
+    @Override
+    public ProductoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_producto, parent, false);
+        return new ProductoViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ProductoViewHolder holder, int position) {
+        Productos producto = productosList.get(position);
+        holder.tvNombre.setText(producto.getNombre());
+        holder.tvDescripcion.setText(producto.getDescripcion());
+        holder.tvPrecio.setText(String.format("%.2f €", producto.getPrecio()));
+
+        if (producto.getFotos() != null && !producto.getFotos().isEmpty()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(producto.getFotos().get(0).getUrlFoto())
+                    .into(holder.imgProducto);
+        } else {
+            holder.imgProducto.setImageResource(R.drawable.placeholder);
+        }
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(producto);
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return productosList.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return filtroProductos;
+    }
+
+    private Filter filtroProductos = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Productos> listaFiltrada = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0) {
+                listaFiltrada.addAll(productosListFull);
+            } else {
+                String filtroPatron = constraint.toString().toLowerCase().trim();
+
+                for (Productos producto : productosListFull) {
+                    // Aquí filtramos por nombre del producto (puedes añadir más campos)
+                    if (producto.getNombre().toLowerCase().contains(filtroPatron)) {
+                        listaFiltrada.add(producto);
+                    }
+                }
+            }
+
+            FilterResults resultados = new FilterResults();
+            resultados.values = listaFiltrada;
+            return resultados;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            productosList.clear();
+            productosList.addAll((List<Productos>) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
+    static class ProductoViewHolder extends RecyclerView.ViewHolder {
+        TextView tvNombre, tvDescripcion, tvPrecio;
+        ImageView imgProducto;
+
+        public ProductoViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvNombre = itemView.findViewById(R.id.tvNombre);
+            tvDescripcion = itemView.findViewById(R.id.tvDescripcion);
+            tvPrecio = itemView.findViewById(R.id.tvPrecio);
+            imgProducto = itemView.findViewById(R.id.imgProducto);
+        }
+    }
+}

@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:title="Mi App"
+            app:title="STOREX"
             app:titleTextColor="@android:color/white"
             app:popupTheme="@style/ThemeOverlay.Material3.Light"/>
 

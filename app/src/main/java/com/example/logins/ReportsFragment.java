@@ -59,7 +59,8 @@ public class ReportsFragment extends Fragment {
             btnEnviarReporte.setEnabled(false);
         }
 
-        reportesNotisApi = RetrofitClient.getReportesNotisApi();
+        // Aquí la única diferencia: obtener la instancia directamente del RetrofitClient
+        reportesNotisApi = RetrofitClient.getRetrofitInstance().create(ReportesNotisApi.class);
 
         rvReportes.setLayoutManager(new LinearLayoutManager(getContext()));
         reporteAdapter = new ReporteAdapter(new ArrayList<>());

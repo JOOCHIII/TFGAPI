@@ -19,7 +19,5 @@ public class RetrofitClient {
         }
         return retrofit;
     }
-    public static ReportesNotisApi getReportesNotisApi() {
-        return getRetrofitInstance().create(ReportesNotisApi.class);
-    }
+
 }

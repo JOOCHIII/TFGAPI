@@ -3,6 +3,7 @@ package com.example.logins;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,13 +109,43 @@ public class DetalleProductoFragment extends Fragment {
 
         btnAgregarCesta.setOnClickListener(v -> {
             String tallaSeleccionada = spinnerTallas.getSelectedItem().toString();
-            Toast.makeText(
-                    getContext(),
-                    "Añadido: " + producto.getNombre() + " (Talla: " + tallaSeleccionada + ")",
-                    Toast.LENGTH_SHORT
-            ).show();
-            // Añadir al carrito si quieres
+
+            // Enviar cantidad = 1 (o la que quieras)
+            CarritoApi carritoApi = RetrofitClient.getRetrofitInstance().create(CarritoApi.class);
+            Call<String> call = carritoApi.agregarAlCarrito(Long.parseLong(userId), producto.getId(), 1);
+
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(getContext(),
+                                "Añadido a la cesta: " + producto.getNombre() + " (Cantidad: 1)",
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Mostrar detalle del error para depurar
+                        try {
+                            String errorBody = response.errorBody().string();
+                            Toast.makeText(getContext(),
+                                    "Error " + response.code() + ": " + errorBody,
+                                    Toast.LENGTH_LONG).show();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(),
+                                    "Error " + response.code() + ": No se pudo leer el error",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast.makeText(getContext(), "Error de conexión", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
+
+
+
 
         btnFavorito.setOnClickListener(v -> {
             toggleFavorito();

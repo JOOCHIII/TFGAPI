@@ -1,5 +1,6 @@
 package com.example.logins;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -107,18 +108,33 @@ public class HomeFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+
         if (id == R.id.action_cart) {
-            Toast.makeText(getContext(), "Carrito clicado", Toast.LENGTH_SHORT).show();
+            SharedPreferences preferences = requireActivity().getSharedPreferences("usuario_prefs", getContext().MODE_PRIVATE);
+            long idUsuario = preferences.getLong("id_usuario", -1);
+
+            if (idUsuario != -1) {
+                CarritoFragment fragment = CarritoFragment.newInstance(idUsuario);
+
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .commit();
+            } else {
+                Toast.makeText(getContext(), "ID de usuario no disponible", Toast.LENGTH_SHORT).show();
+            }
             return true;
+
         } else if (id == R.id.action_favorites) {
-            // Abre el fragmento de favoritos
             getParentFragmentManager().beginTransaction()
-                    .replace(R.id.content_frame, new FavoritosFragment()) // Asegúrate de crearlo
+                    .replace(R.id.content_frame, new FavoritosFragment())
                     .addToBackStack(null)
                     .commit();
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
+
 
 }

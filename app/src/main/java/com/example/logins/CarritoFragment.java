@@ -110,10 +110,13 @@ public class CarritoFragment extends Fragment implements CarritoAdapter.OnCantid
     private void actualizarTotal() {
         double total = 0;
         for (Carrito item : carrito) {
-            total += item.getSubtotal();  // Asegúrate que Carrito tenga este método
+            if (item != null) {
+                total += item.getSubtotal();
+            }
         }
         tvTotal.setText(String.format("Total: %.2f €", total));
     }
+
 
     @Override
     public void onCantidadChange() {

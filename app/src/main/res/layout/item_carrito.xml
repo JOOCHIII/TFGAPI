@@ -29,12 +29,25 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
+        <!-- Talla del producto -->
+        <TextView
+            android:id="@+id/tvTalla"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvNombre"
+            android:layout_toEndOf="@id/ivFoto"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="2dp"
+            android:text="Talla: M"
+            android:textSize="14sp"
+            android:textColor="#666666"/>
+
         <!-- Precio unitario -->
         <TextView
             android:id="@+id/tvPrecioUnitario"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvNombre"
+            android:layout_below="@id/tvTalla"
             android:layout_toEndOf="@id/ivFoto"
             android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
@@ -77,10 +90,9 @@
                 android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Sumar cantidad"
-                android:src="@android:drawable/ic_input_add"
+                android:src="@drawable/baseline_add_24"
                 android:layout_marginStart="8dp" />
         </LinearLayout>
-
 
         <!-- Subtotal -->
         <TextView

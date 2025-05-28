@@ -48,33 +48,26 @@ public class CarritoAdapter extends RecyclerView.Adapter<CarritoAdapter.CarritoV
     @Override
     public void onBindViewHolder(@NonNull CarritoViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Carrito item = cartItems.get(position);
-        Productos producto = item.getProducto();
 
-        holder.tvNombre.setText(producto.getNombre());
-        holder.tvPrecioUnitario.setText(String.format("%.2f €", producto.getPrecio()));
+        holder.tvNombre.setText(item.getNombre());
+        holder.tvPrecioUnitario.setText(String.format("%.2f €", item.getPrecio()));
         holder.tvCantidad.setText(String.valueOf(item.getCantidad()));
-        holder.tvSubtotal.setText(String.format("%.2f €", producto.getPrecio() * item.getCantidad()));
+        holder.tvSubtotal.setText(String.format("%.2f €", item.getSubtotal()));
 
-        // Cargar imagen
-        if (producto.getFotos() != null && !producto.getFotos().isEmpty()) {
-            String urlFoto = producto.getFotos().get(0).getUrlFoto();
-            if (urlFoto != null && !urlFoto.isEmpty()) {
-                Picasso.get()
-                        .load(urlFoto)
-                        .placeholder(R.drawable.ic_placeholder)
-                        .error(R.drawable.ic_error)
-                        .into(holder.ivFoto);
-            } else {
-                holder.ivFoto.setImageResource(R.drawable.ic_placeholder);
-            }
-        } else {
-            holder.ivFoto.setImageResource(R.drawable.ic_placeholder);
-        }
+        // Imagen con Picasso o placeholder
+        /*
+        Picasso.get()
+                .load(item.getImagenUrl())
+                .placeholder(R.drawable.ic_placeholder)
+                .error(R.drawable.ic_error)
+                .into(holder.ivFoto);
+        */
+        holder.ivFoto.setImageResource(R.drawable.ic_placeholder);
 
         // Botón para aumentar cantidad
         holder.btnSumar.setOnClickListener(v -> {
             item.setCantidad(item.getCantidad() + 1);
-            actualizarCantidadEnServidor(item.getCantidad(), producto.getId());
+            actualizarCantidadEnServidor(item.getCantidad(), item.getIdProducto(), item.getTalla());
             notifyItemChanged(position);
             listener.onCantidadChange();
         });
@@ -83,7 +76,7 @@ public class CarritoAdapter extends RecyclerView.Adapter<CarritoAdapter.CarritoV
         holder.btnRestar.setOnClickListener(v -> {
             if (item.getCantidad() > 1) {
                 item.setCantidad(item.getCantidad() - 1);
-                actualizarCantidadEnServidor(item.getCantidad(), producto.getId());
+                actualizarCantidadEnServidor(item.getCantidad(), item.getIdProducto(), item.getTalla());
                 notifyItemChanged(position);
                 listener.onCantidadChange();
             }
@@ -93,31 +86,11 @@ public class CarritoAdapter extends RecyclerView.Adapter<CarritoAdapter.CarritoV
         holder.btnEliminar.setOnClickListener(v -> {
             SharedPreferences preferences = context.getSharedPreferences("usuario_prefs", Context.MODE_PRIVATE);
             long idUsuario = preferences.getLong("id_usuario", -1);
-            long idProducto = producto.getId();
+            long idProducto = item.getIdProducto();
+            String talla = item.getTalla();
 
             if (idUsuario != -1) {
-                CarritoApi api = RetrofitClient.getRetrofitInstance().create(CarritoApi.class);
-                Call<Void> call = api.eliminarDelCarrito(idUsuario, idProducto);
-
-                call.enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if (response.isSuccessful()) {
-                            cartItems.remove(position);
-                            notifyItemRemoved(position);
-                            notifyItemRangeChanged(position, cartItems.size());
-                            listener.onCantidadChange();
-                            Toast.makeText(context, "Producto eliminado del carrito", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(context, "No se pudo eliminar el producto", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                eliminarProductoDelCarrito(idUsuario, idProducto, talla, position);
             } else {
                 Toast.makeText(context, "ID de usuario no disponible", Toast.LENGTH_SHORT).show();
             }
@@ -147,13 +120,13 @@ public class CarritoAdapter extends RecyclerView.Adapter<CarritoAdapter.CarritoV
         }
     }
 
-    private void actualizarCantidadEnServidor(int nuevaCantidad, long idProducto) {
+    private void actualizarCantidadEnServidor(int nuevaCantidad, long idProducto, String talla) {
         SharedPreferences preferences = context.getSharedPreferences("usuario_prefs", Context.MODE_PRIVATE);
         long idUsuario = preferences.getLong("id_usuario", -1);
 
         if (idUsuario != -1) {
             CarritoApi api = RetrofitClient.getRetrofitInstance().create(CarritoApi.class);
-            Call<Void> call = api.actualizarCantidad(idUsuario, idProducto, nuevaCantidad);
+            Call<Void> call = api.actualizarCantidad(idUsuario, idProducto, talla, nuevaCantidad);
 
             call.enqueue(new Callback<Void>() {
                 @Override
@@ -169,5 +142,30 @@ public class CarritoAdapter extends RecyclerView.Adapter<CarritoAdapter.CarritoV
                 }
             });
         }
+    }
+
+    private void eliminarProductoDelCarrito(long idUsuario, long idProducto, String talla, int position) {
+        CarritoApi api = RetrofitClient.getRetrofitInstance().create(CarritoApi.class);
+        Call<Void> call = api.eliminarDelCarrito(idUsuario, idProducto, talla);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    cartItems.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, cartItems.size());
+                    listener.onCantidadChange();
+                    Toast.makeText(context, "Producto eliminado del carrito", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "No se pudo eliminar el producto", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

@@ -29,7 +29,7 @@ public class CarritoFragment extends Fragment implements CarritoAdapter.OnCantid
     private TextView tvTotal;
     private Button btnTramitarPedido;
 
-    private List<CarritoDTO> carrito;  // Cambiado a CarritoDTO
+    private List<CarritoDTO> carrito;
 
     private CarritoAdapter adapter;
 
@@ -74,7 +74,7 @@ public class CarritoFragment extends Fragment implements CarritoAdapter.OnCantid
         cargarCarritoDesdeApi();
 
         btnTramitarPedido.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Funcionalidad de tramitar pedido pendiente", Toast.LENGTH_SHORT).show();
+            tramitarPedido();
         });
 
         return view;
@@ -83,7 +83,7 @@ public class CarritoFragment extends Fragment implements CarritoAdapter.OnCantid
     private void cargarCarritoDesdeApi() {
         CarritoApi apiService = RetrofitClient.getRetrofitInstance().create(CarritoApi.class);
 
-        Call<List<CarritoDTO>> call = apiService.obtenerCarritoUsuario(idUsuario);  // Cambiado a CarritoDTO
+        Call<List<CarritoDTO>> call = apiService.obtenerCarritoUsuario(idUsuario);
 
         call.enqueue(new Callback<List<CarritoDTO>>() {
             @Override
@@ -118,5 +118,29 @@ public class CarritoFragment extends Fragment implements CarritoAdapter.OnCantid
     @Override
     public void onCantidadChange() {
         actualizarTotal();
+    }
+
+    private void tramitarPedido() {
+        PedidoApi pedidoApi = RetrofitClient.getRetrofitInstance().create(PedidoApi.class);
+        Call<Void> call = pedidoApi.tramitarPedido(idUsuario);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(getContext(), "Pedido tramitado con éxito", Toast.LENGTH_SHORT).show();
+                    carrito.clear();
+                    adapter.notifyDataSetChanged();
+                    actualizarTotal();
+                } else {
+                    Toast.makeText(getContext(), "Error al tramitar pedido", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

@@ -87,7 +87,7 @@ public class FavoritosFragment extends Fragment {
                         recyclerView.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    textoSinFavoritos.setText("Error al cargar favoritos");
+                    textoSinFavoritos.setText("No tienes favoritos");
                     textoSinFavoritos.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                 }

@@ -10,8 +10,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Contenedor para carrusel + botón favorito -->
-        <RelativeLayout
+        <!-- Carrusel de imágenes + botón favorito -->
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_marginBottom="16dp">
@@ -22,19 +22,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <!-- Botón favorito -->
+            <!-- Botón favorito (posicionado arriba a la derecha) -->
             <ImageButton
                 android:id="@+id/btnFavorito"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
+                android:layout_gravity="top|end"
+                android:layout_margin="8dp"
                 android:background="@android:color/transparent"
                 android:padding="8dp"
                 android:src="@drawable/ic_favorite_border"
                 android:contentDescription="Marcar como favorito" />
-
-        </RelativeLayout>
+        </FrameLayout>
 
         <!-- Nombre del producto -->
         <TextView
@@ -82,6 +81,5 @@
             android:textColor="#FFFFFF"
             android:textStyle="bold"
             android:layout_marginTop="24dp" />
-
     </LinearLayout>
 </ScrollView>

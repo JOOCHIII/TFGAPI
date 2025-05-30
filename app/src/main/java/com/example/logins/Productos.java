@@ -1,26 +1,29 @@
 package com.example.logins;
-import com.example.logins.Productos;
-import com.example.logins.FotoProducto;
-
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+
 public class Productos implements Serializable {
-    private int id;
+    private long id;
     private String nombre;
     private String descripcion;
     private double precio;
-    private int stock;
-    private String categoria;
-    private boolean destacado;
     private List<FotoProducto> fotos;
 
     // Constructor vacío
     public Productos() {}
 
-    // Getters y Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public Productos(long id, String nombre, String descripcion, double precio, List<FotoProducto> fotos) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.fotos = fotos;
+    }
+
+    public long getId() { return id; }
+    public void setId(long id) { this.id = id; }
 
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
@@ -31,15 +34,18 @@ public class Productos implements Serializable {
     public double getPrecio() { return precio; }
     public void setPrecio(double precio) { this.precio = precio; }
 
-    public int getStock() { return stock; }
-    public void setStock(int stock) { this.stock = stock; }
-
-    public String getCategoria() { return categoria; }
-    public void setCategoria(String categoria) { this.categoria = categoria; }
-
-    public boolean isDestacado() { return destacado; }
-    public void setDestacado(boolean destacado) { this.destacado = destacado; }
-
     public List<FotoProducto> getFotos() { return fotos; }
     public void setFotos(List<FotoProducto> fotos) { this.fotos = fotos; }
+
+    // Método para obtener las URLs de fotos a partir de la lista de objetos FotoProducto
+    public List<String> getUrlsFotos() {
+        if (fotos == null) return new ArrayList<>();
+        List<String> urls = new ArrayList<>();
+        for (FotoProducto foto : fotos) {
+            if (foto.getUrlFoto() != null) {
+                urls.add(foto.getUrlFoto());
+            }
+        }
+        return urls;
+    }
 }

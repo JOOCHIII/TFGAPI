@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -44,6 +43,12 @@ public class FavoritosFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        cargarFavoritos();
+    }
+
     private void cargarFavoritos() {
         SharedPreferences preferences = requireContext().getSharedPreferences("usuario_prefs", Context.MODE_PRIVATE);
         long idUsuario = preferences.getLong("id_usuario", -1);
@@ -51,6 +56,7 @@ public class FavoritosFragment extends Fragment {
         if (idUsuario == -1) {
             textoSinFavoritos.setText("Usuario no autenticado");
             textoSinFavoritos.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
             return;
         }
 
@@ -64,6 +70,7 @@ public class FavoritosFragment extends Fragment {
                     List<Productos> productosFavoritos = response.body();
 
                     if (productosFavoritos.isEmpty()) {
+                        textoSinFavoritos.setText("No tienes favoritos");
                         textoSinFavoritos.setVisibility(View.VISIBLE);
                         recyclerView.setVisibility(View.GONE);
                     } else {
@@ -82,6 +89,7 @@ public class FavoritosFragment extends Fragment {
                 } else {
                     textoSinFavoritos.setText("Error al cargar favoritos");
                     textoSinFavoritos.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
                 }
             }
 
@@ -89,10 +97,8 @@ public class FavoritosFragment extends Fragment {
             public void onFailure(Call<List<Productos>> call, Throwable t) {
                 textoSinFavoritos.setText("Error: " + t.getMessage());
                 textoSinFavoritos.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
             }
         });
-
-
-
     }
 }

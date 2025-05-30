@@ -19,6 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,6 +38,14 @@ public class DetalleProductoFragment extends Fragment {
     private ImageButton btnFavorito;
 
     private long userId;
+    private boolean esFavorito = false;
+    public static DetalleProductoFragment newInstance(Productos producto) {
+        DetalleProductoFragment fragment = new DetalleProductoFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_PRODUCTO, producto); // Asegúrate de que Productos implemente Serializable
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,6 +89,13 @@ public class DetalleProductoFragment extends Fragment {
             );
             adapterTallas.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerTallas.setAdapter(adapterTallas);
+
+            // Cargar fotos con ViewPager2 y adapter
+            List<String> listaUrlsFotos = producto.getUrlsFotos();
+            if (listaUrlsFotos != null && !listaUrlsFotos.isEmpty()) {
+                FotosPagerAdapter adapterFotos = new FotosPagerAdapter(requireContext(), listaUrlsFotos);
+                viewPagerFotos.setAdapter(adapterFotos);
+            }
         }
 
         btnAgregarCesta.setOnClickListener(v -> {
@@ -107,16 +124,109 @@ public class DetalleProductoFragment extends Fragment {
             });
         });
 
-        // Aquí podrías manejar la lógica de favoritos si lo deseas
+        btnFavorito.setOnClickListener(v -> {
+            if (userId == -1) {
+                Toast.makeText(requireContext(), "Debes iniciar sesión para usar favoritos", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (esFavorito) {
+                quitarDeFavoritos();
+            } else {
+                agregarAFavoritos();
+            }
+        });
+
+        comprobarSiEsFavorito();
 
         return view;
     }
 
-    public static DetalleProductoFragment newInstance(Productos producto) {
-        DetalleProductoFragment fragment = new DetalleProductoFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(ARG_PRODUCTO, producto);
-        fragment.setArguments(args);
-        return fragment;
+    private void comprobarSiEsFavorito() {
+        if (userId == -1) {
+            btnFavorito.setVisibility(View.GONE);
+            return;
+        }
+
+        FavoritosApi favoritosApi = RetrofitClient.getRetrofitInstance().create(FavoritosApi.class);
+        Call<List<Productos>> call = favoritosApi.obtenerFavoritos(userId);
+
+        call.enqueue(new Callback<List<Productos>>() {
+            @Override
+            public void onResponse(Call<List<Productos>> call, Response<List<Productos>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Productos> favoritos = response.body();
+                    esFavorito = false;
+                    for (Productos p : favoritos) {
+                        if (p.getId() == producto.getId()) {
+                            esFavorito = true;
+                            break;
+                        }
+                    }
+                    actualizarIconoFavorito();
+                } else {
+                    Log.e("DetalleProducto", "Error al obtener favoritos: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Productos>> call, Throwable t) {
+                Log.e("DetalleProducto", "Error red al obtener favoritos", t);
+            }
+        });
+    }
+
+    private void agregarAFavoritos() {
+        FavoritosApi favoritosApi = RetrofitClient.getRetrofitInstance().create(FavoritosApi.class);
+        Call<String> call = favoritosApi.agregarFavorito(userId, producto.getId());
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    esFavorito = true;
+                    actualizarIconoFavorito();
+                    Toast.makeText(requireContext(), "Añadido a favoritos", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(requireContext(), "Error al añadir favorito", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(requireContext(), "Error de red al añadir favorito", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void quitarDeFavoritos() {
+        FavoritosApi favoritosApi = RetrofitClient.getRetrofitInstance().create(FavoritosApi.class);
+        Call<String> call = favoritosApi.eliminarFavorito(userId, producto.getId());
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    esFavorito = false;
+                    actualizarIconoFavorito();
+                    Toast.makeText(requireContext(), "Eliminado de favoritos", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(requireContext(), "Error al eliminar favorito", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(requireContext(), "Error de red al eliminar favorito", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void actualizarIconoFavorito() {
+        if (esFavorito) {
+            btnFavorito.setImageResource(R.drawable.ic_favorite); // icono corazón lleno
+        } else {
+            btnFavorito.setImageResource(R.drawable.ic_favorite_border
+                    ); // icono corazón borde
+        }
     }
 }

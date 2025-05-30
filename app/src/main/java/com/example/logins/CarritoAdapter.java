@@ -1,6 +1,5 @@
 package com.example.logins;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
@@ -14,7 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -22,150 +21,137 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CarritoAdapter extends RecyclerView.Adapter<CarritoAdapter.CarritoViewHolder> {
+public class CarritoAdapter extends RecyclerView.Adapter<CarritoAdapter.ViewHolder> {
 
     public interface OnCantidadChangeListener {
         void onCantidadChange();
     }
 
     private Context context;
-    private List<Carrito> cartItems;
+    private List<CarritoDTO> carritoList;
     private OnCantidadChangeListener listener;
+    private CarritoApi apiService;
+    private long idUsuario;
 
-    public CarritoAdapter(Context context, List<Carrito> cartItems, OnCantidadChangeListener listener) {
+    public CarritoAdapter(Context context, List<CarritoDTO> carritoList, OnCantidadChangeListener listener) {
         this.context = context;
-        this.cartItems = cartItems;
+        this.carritoList = carritoList;
         this.listener = listener;
+
+        // Obtener idUsuario desde SharedPreferences
+        SharedPreferences preferences = context.getSharedPreferences("usuario_prefs", Context.MODE_PRIVATE);
+        this.idUsuario = preferences.getLong("id_usuario", -1);
+
+        // Inicializar Retrofit y API
+        apiService = RetrofitClient.getRetrofitInstance().create(CarritoApi.class);
     }
 
     @NonNull
     @Override
-    public CarritoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CarritoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_carrito, parent, false);
-        return new CarritoViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CarritoViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        Carrito item = cartItems.get(position);
+    public void onBindViewHolder(@NonNull CarritoAdapter.ViewHolder holder, int position) {
+        CarritoDTO item = carritoList.get(position);
 
         holder.tvNombre.setText(item.getNombre());
-        holder.tvPrecioUnitario.setText(String.format("%.2f €", item.getPrecio()));
+        holder.tvTalla.setText("Talla: " + item.getTalla());
         holder.tvCantidad.setText(String.valueOf(item.getCantidad()));
-        holder.tvSubtotal.setText(String.format("%.2f €", item.getSubtotal()));
+        holder.tvPrecio.setText(String.format("Precio: %.2f €", item.getPrecio()));
+        double subtotal = item.getCantidad() * item.getPrecio();
+        holder.tvSubtotal.setText(String.format("Subtotal: %.2f €", subtotal));
 
-        // Imagen con Picasso o placeholder
-        /*
-        Picasso.get()
+        Glide.with(context)
                 .load(item.getImagenUrl())
                 .placeholder(R.drawable.ic_placeholder)
                 .error(R.drawable.ic_error)
-                .into(holder.ivFoto);
-        */
-        holder.ivFoto.setImageResource(R.drawable.ic_placeholder);
+                .into(holder.ivProducto);
 
-        // Botón para aumentar cantidad
         holder.btnSumar.setOnClickListener(v -> {
-            item.setCantidad(item.getCantidad() + 1);
-            actualizarCantidadEnServidor(item.getCantidad(), item.getIdProducto(), item.getTalla());
-            notifyItemChanged(position);
-            listener.onCantidadChange();
+            int nuevaCantidad = item.getCantidad() + 1;
+            actualizarCantidadEnAPI(item, nuevaCantidad, position);
         });
 
-        // Botón para disminuir cantidad
         holder.btnRestar.setOnClickListener(v -> {
-            if (item.getCantidad() > 1) {
-                item.setCantidad(item.getCantidad() - 1);
-                actualizarCantidadEnServidor(item.getCantidad(), item.getIdProducto(), item.getTalla());
-                notifyItemChanged(position);
-                listener.onCantidadChange();
-            }
-        });
-
-        // Botón eliminar
-        holder.btnEliminar.setOnClickListener(v -> {
-            SharedPreferences preferences = context.getSharedPreferences("usuario_prefs", Context.MODE_PRIVATE);
-            long idUsuario = preferences.getLong("id_usuario", -1);
-            long idProducto = item.getIdProducto();
-            String talla = item.getTalla();
-
-            if (idUsuario != -1) {
-                eliminarProductoDelCarrito(idUsuario, idProducto, talla, position);
+            int nuevaCantidad = item.getCantidad() - 1;
+            if (nuevaCantidad > 0) {
+                actualizarCantidadEnAPI(item, nuevaCantidad, position);
             } else {
-                Toast.makeText(context, "ID de usuario no disponible", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "La cantidad no puede ser menor que 1", Toast.LENGTH_SHORT).show();
             }
         });
+
+        holder.btnEliminar.setOnClickListener(v -> eliminarProductoEnAPI(item, position));
     }
 
     @Override
     public int getItemCount() {
-        return cartItems.size();
+        return carritoList.size();
     }
 
-    static class CarritoViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivFoto;
-        TextView tvNombre, tvPrecioUnitario, tvCantidad, tvSubtotal;
-        ImageButton btnSumar, btnRestar, btnEliminar;
-
-        public CarritoViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ivFoto = itemView.findViewById(R.id.ivFoto);
-            tvNombre = itemView.findViewById(R.id.tvNombre);
-            tvPrecioUnitario = itemView.findViewById(R.id.tvPrecioUnitario);
-            tvCantidad = itemView.findViewById(R.id.tvCantidad);
-            tvSubtotal = itemView.findViewById(R.id.tvSubtotal);
-            btnSumar = itemView.findViewById(R.id.btnSumar);
-            btnRestar = itemView.findViewById(R.id.btnRestar);
-            btnEliminar = itemView.findViewById(R.id.btnEliminar);
-        }
-    }
-
-    private void actualizarCantidadEnServidor(int nuevaCantidad, long idProducto, String talla) {
-        SharedPreferences preferences = context.getSharedPreferences("usuario_prefs", Context.MODE_PRIVATE);
-        long idUsuario = preferences.getLong("id_usuario", -1);
-
-        if (idUsuario != -1) {
-            CarritoApi api = RetrofitClient.getRetrofitInstance().create(CarritoApi.class);
-            Call<Void> call = api.actualizarCantidad(idUsuario, idProducto, talla, nuevaCantidad);
-
-            call.enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    if (!response.isSuccessful()) {
-                        Toast.makeText(context, "No se pudo actualizar la cantidad", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
-
-    private void eliminarProductoDelCarrito(long idUsuario, long idProducto, String talla, int position) {
-        CarritoApi api = RetrofitClient.getRetrofitInstance().create(CarritoApi.class);
-        Call<Void> call = api.eliminarDelCarrito(idUsuario, idProducto, talla);
-
-        call.enqueue(new Callback<Void>() {
+    private void actualizarCantidadEnAPI(CarritoDTO item, int nuevaCantidad, int position) {
+        Call<String> call = apiService.actualizarCantidad(idUsuario, item.getIdProducto(), item.getTalla(), nuevaCantidad);
+        call.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
-                    cartItems.remove(position);
+                    item.setCantidad(nuevaCantidad);
+                    notifyItemChanged(position);
+                    listener.onCantidadChange();
+                    Toast.makeText(context, "Cantidad actualizada", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Error al actualizar cantidad", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(context, "Error de red: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void eliminarProductoEnAPI(CarritoDTO item, int position) {
+        Call<String> call = apiService.eliminarDelCarrito(idUsuario, item.getIdProducto(), item.getTalla());
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    carritoList.remove(position);
                     notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, cartItems.size());
                     listener.onCantidadChange();
                     Toast.makeText(context, "Producto eliminado del carrito", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(context, "No se pudo eliminar el producto", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Error al eliminar producto", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(context, "Error de red: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView ivProducto;
+        TextView tvNombre, tvTalla, tvCantidad, tvPrecio, tvSubtotal;
+        ImageButton btnSumar, btnRestar, btnEliminar;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ivProducto = itemView.findViewById(R.id.ivFotoProducto);
+            tvNombre = itemView.findViewById(R.id.tvNombreProducto);
+            tvTalla = itemView.findViewById(R.id.tvTallaProducto);
+            tvCantidad = itemView.findViewById(R.id.tvCantidadProducto);
+            tvPrecio = itemView.findViewById(R.id.tvPrecioUnitarioProducto);
+            tvSubtotal = itemView.findViewById(R.id.tvSubtotalProducto);
+            btnSumar = itemView.findViewById(R.id.btnSumarProducto);
+            btnRestar = itemView.findViewById(R.id.btnRestarProducto);
+            btnEliminar = itemView.findViewById(R.id.btnEliminarProducto);
+        }
     }
 }

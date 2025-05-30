@@ -1,7 +1,5 @@
 package com.example.logins;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +29,7 @@ public class CarritoFragment extends Fragment implements CarritoAdapter.OnCantid
     private TextView tvTotal;
     private Button btnTramitarPedido;
 
-    private List<Carrito> carrito;  // Lista de productos en carrito
+    private List<CarritoDTO> carrito;  // Cambiado a CarritoDTO
 
     private CarritoAdapter adapter;
 
@@ -85,11 +83,11 @@ public class CarritoFragment extends Fragment implements CarritoAdapter.OnCantid
     private void cargarCarritoDesdeApi() {
         CarritoApi apiService = RetrofitClient.getRetrofitInstance().create(CarritoApi.class);
 
-        Call<List<Carrito>> call = apiService.getCarritoPorUsuario(idUsuario);
+        Call<List<CarritoDTO>> call = apiService.obtenerCarritoUsuario(idUsuario);  // Cambiado a CarritoDTO
 
-        call.enqueue(new Callback<List<Carrito>>() {
+        call.enqueue(new Callback<List<CarritoDTO>>() {
             @Override
-            public void onResponse(Call<List<Carrito>> call, Response<List<Carrito>> response) {
+            public void onResponse(Call<List<CarritoDTO>> call, Response<List<CarritoDTO>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     carrito.clear();
                     carrito.addAll(response.body());
@@ -101,7 +99,7 @@ public class CarritoFragment extends Fragment implements CarritoAdapter.OnCantid
             }
 
             @Override
-            public void onFailure(Call<List<Carrito>> call, Throwable t) {
+            public void onFailure(Call<List<CarritoDTO>> call, Throwable t) {
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -109,14 +107,13 @@ public class CarritoFragment extends Fragment implements CarritoAdapter.OnCantid
 
     private void actualizarTotal() {
         double total = 0;
-        for (Carrito item : carrito) {
+        for (CarritoDTO item : carrito) {
             if (item != null) {
                 total += item.getSubtotal();
             }
         }
         tvTotal.setText(String.format("Total: %.2f €", total));
     }
-
 
     @Override
     public void onCantidadChange() {

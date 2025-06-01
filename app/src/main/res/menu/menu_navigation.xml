@@ -19,8 +19,14 @@
                 android:id="@+id/nav_notifications"
                 android:title="Notificaciones"
                 android:icon="@drawable/baseline_notifications_24" />
+
+        <item
+            android:id="@+id/nav_my_orders"
+            android:title="Mis pedidos"
+            android:icon="@drawable/paquete" />
         <item
             android:id="@+id/nav_logout"
             android:title="Cerrar sesión"
             android:icon="@drawable/baseline_exit_to_app_24" />
+
     </menu>

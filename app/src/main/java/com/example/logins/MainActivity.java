@@ -72,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame, new NotificationsFragment())
                         .commit();
+            } else if (id == R.id.nav_my_orders) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, new MisPedidosFragment())
+                        .commit();
             } else if (id == R.id.nav_logout) {
                 Toast.makeText(MainActivity.this, "Cerrando sesión...", Toast.LENGTH_SHORT).show();
 

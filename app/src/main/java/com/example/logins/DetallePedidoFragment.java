@@ -1,6 +1,5 @@
 package com.example.logins;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -21,13 +19,12 @@ import retrofit2.Response;
 
 public class DetallePedidoFragment extends Fragment {
 
-    private static final String ARG_ID_PEDIDO = "id_pedido";
+    private static final String ARG_ID_PEDIDO = "idPedido";
     private Long idPedido;
 
     private TextView tvFecha, tvEstado, tvTotal;
-    private RecyclerView recyclerProductos;
+    private RecyclerView recyclerView;
     private ProductoPedidoAdapter adapter;
-    private List<ProductoPedidoDTO> productos = new ArrayList<>();
 
     public static DetallePedidoFragment newInstance(Long idPedido) {
         DetallePedidoFragment fragment = new DetallePedidoFragment();
@@ -45,55 +42,42 @@ public class DetallePedidoFragment extends Fragment {
         }
     }
 
-    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.pedidos_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_detalle_pedido, container, false);
 
-        tvFecha = view.findViewById(R.id.tvFecha);
-        tvEstado = view.findViewById(R.id.tvEstado);
-        tvTotal = view.findViewById(R.id.tvTotal);
-        recyclerProductos = view.findViewById(R.id.recyclerProductosPedido);
+        tvFecha = view.findViewById(R.id.tvFechaDetalle);
+        tvEstado = view.findViewById(R.id.tvEstadoDetalle);
+        tvTotal = view.findViewById(R.id.tvTotalDetalle);
+        recyclerView = view.findViewById(R.id.recyclerDetallePedido);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new ProductoPedidoAdapter(productos, getContext());
-        recyclerProductos.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerProductos.setAdapter(adapter);
-
-        cargarDetallePedido();
+        obtenerDetallePedido();
 
         return view;
     }
 
-    private void cargarDetallePedido() {
+    private void obtenerDetallePedido() {
         PedidoApi api = RetrofitClient.getRetrofitInstance().create(PedidoApi.class);
-        Call<DetallePedidoResponse> call = api.obtenerDetallesDePedido(idPedido);
-
-        call.enqueue(new Callback<DetallePedidoResponse>() {
+        api.obtenerDetallesDePedido(idPedido).enqueue(new Callback<DetallePedidoResponse>() {
             @Override
             public void onResponse(Call<DetallePedidoResponse> call, Response<DetallePedidoResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     DetallePedidoResponse detalle = response.body();
                     tvFecha.setText("Fecha: " + detalle.getFecha());
                     tvEstado.setText("Estado: " + detalle.getEstado());
-                    tvTotal.setText("Total: " + detalle.getTotal() + " €");
+                    tvTotal.setText(String.format("Total: %.2f €", detalle.getTotal()));
 
-                    productos.clear();
-
-                    if (detalle.getProductos() != null) {
-                        productos.addAll(detalle.getProductos());
-                    } else {
-                        Toast.makeText(getContext(), "Este pedido no contiene productos", Toast.LENGTH_SHORT).show();
-                    }
-
-                    adapter.notifyDataSetChanged();
+                    adapter = new ProductoPedidoAdapter(detalle.getDetalles(), getContext());
+                    recyclerView.setAdapter(adapter);
                 } else {
-                    Toast.makeText(getContext(), "No se pudo cargar el detalle del pedido", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Error al cargar detalle", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<DetallePedidoResponse> call, Throwable t) {
-                Toast.makeText(getContext(), "Error al cargar detalles", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error de red al obtener detalle", Toast.LENGTH_SHORT).show();
             }
         });
     }

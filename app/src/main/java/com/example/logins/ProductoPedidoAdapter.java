@@ -16,10 +16,10 @@ import java.util.List;
 
 public class ProductoPedidoAdapter extends RecyclerView.Adapter<ProductoPedidoAdapter.ViewHolder> {
 
-    private List<ProductoPedidoDTO> productos;
+    private List<ItemDetalleDTO> productos;
     private Context context;
 
-    public ProductoPedidoAdapter(List<ProductoPedidoDTO> productos, Context context) {
+    public ProductoPedidoAdapter(List<ItemDetalleDTO> productos, Context context) {
         this.productos = productos;
         this.context = context;
     }
@@ -33,12 +33,12 @@ public class ProductoPedidoAdapter extends RecyclerView.Adapter<ProductoPedidoAd
 
     @Override
     public void onBindViewHolder(@NonNull ProductoPedidoAdapter.ViewHolder holder, int position) {
-        ProductoPedidoDTO producto = productos.get(position);
-        holder.tvNombre.setText(producto.getNombre());
+        ItemDetalleDTO producto = productos.get(position);
+        holder.tvNombre.setText(producto.getNombreProducto());
         holder.tvCantidad.setText("Cantidad: " + producto.getCantidad());
-        holder.tvPrecio.setText(String.format("Precio: %.2f €", producto.getPrecio()));
+        holder.tvPrecio.setText(String.format("Precio: %.2f €", producto.getPrecioUnitario()));
+        holder.tvTalla.setText("Talla: " + producto.getTalla());
 
-        // Cargar imagen con Glide
         Glide.with(context)
                 .load(producto.getImagenUrl())
                 .placeholder(R.drawable.ic_placeholder)
@@ -51,7 +51,7 @@ public class ProductoPedidoAdapter extends RecyclerView.Adapter<ProductoPedidoAd
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvNombre, tvCantidad, tvPrecio;
+        TextView tvNombre, tvCantidad, tvPrecio, tvTalla;
         ImageView ivProducto;
 
         public ViewHolder(@NonNull View itemView) {
@@ -59,6 +59,7 @@ public class ProductoPedidoAdapter extends RecyclerView.Adapter<ProductoPedidoAd
             tvNombre = itemView.findViewById(R.id.tvNombreProducto);
             tvCantidad = itemView.findViewById(R.id.tvCantidad);
             tvPrecio = itemView.findViewById(R.id.tvPrecio);
+            tvTalla = itemView.findViewById(R.id.tvTalla);
             ivProducto = itemView.findViewById(R.id.ivProducto);
         }
     }

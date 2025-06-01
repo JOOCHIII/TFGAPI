@@ -21,7 +21,7 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
         void onPedidoClick(Pedido pedido);
     }
 
-    // Nuevo constructor con listener
+    // Constructor con listener para el click en pedido
     public PedidoAdapter(List<Pedido> listaPedidos, Context context, OnPedidoClickListener listener) {
         this.listaPedidos = listaPedidos;
         this.context = context;
@@ -40,11 +40,11 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
     public void onBindViewHolder(@NonNull PedidoViewHolder holder, int position) {
         Pedido pedido = listaPedidos.get(position);
         holder.tvPedidoId.setText("Pedido #" + pedido.getId());
-        holder.tvFecha.setText("Fecha: " + pedido.getFecha().substring(0, 10)); // solo fecha
+        holder.tvFecha.setText("Fecha: " + pedido.getFecha().substring(0, 10)); // Solo fecha (yyyy-MM-dd)
         holder.tvEstado.setText("Estado: " + pedido.getEstado());
         holder.tvTotal.setText("Total: " + String.format("%.2f", pedido.getTotal()) + " €");
 
-        // Manejar click
+        // Manejar click en el item
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onPedidoClick(pedido);

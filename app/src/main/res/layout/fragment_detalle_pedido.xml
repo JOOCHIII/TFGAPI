@@ -1,37 +1,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Datos generales del pedido -->
-    <TextView
-        android:id="@+id/tvFecha"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Fecha: -" />
+    <TextView android:id="@+id/tvFechaDetalle"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Fecha:" android:textStyle="bold"/>
 
-    <TextView
-        android:id="@+id/tvEstado"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Estado: -" />
+    <TextView android:id="@+id/tvEstadoDetalle"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Estado:"/>
 
-    <TextView
-        android:id="@+id/tvTotal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Total: -" />
+    <TextView android:id="@+id/tvTotalDetalle"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Total:"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#ccc"
-        android:layout_marginVertical="10dp" />
-
-    <!-- Lista de productos del pedido -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerProductosPedido"
+        android:id="@+id/recyclerDetallePedido"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 </LinearLayout>

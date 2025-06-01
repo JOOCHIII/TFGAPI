@@ -1,44 +1,26 @@
 package com.example.logins;
 
-import java.util.Collection;
 import java.util.List;
 
 public class DetallePedidoResponse {
+    private Long id;
     private String fecha;
     private String estado;
     private double total;
-    private List<ProductoPedidoDTO> productos;
+    private List<ItemDetalleDTO> detalles;
 
-    public String getFecha() {
-        return fecha;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
-    }
+    public String getFecha() { return fecha; }
+    public void setFecha(String fecha) { this.fecha = fecha; }
 
-    public String getEstado() {
-        return estado;
-    }
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
+    public double getTotal() { return total; }
+    public void setTotal(double total) { this.total = total; }
 
-    public double getTotal() {
-        return total;
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
-    }
-
-    public Collection<? extends ProductoPedidoDTO> getProductos() {
-        return productos;
-    }
-
-    public void setProductos(List<ProductoPedidoDTO> productos) {
-        this.productos = productos;
-    }
-// Getters y Setters
+    public List<ItemDetalleDTO> getDetalles() { return detalles; }
+    public void setDetalles(List<ItemDetalleDTO> detalles) { this.detalles = detalles; }
 }

@@ -5,6 +5,7 @@ public class ProductoPedidoDTO {
     private int cantidad;
     private double precio;
     private String imagenUrl;
+    private String talla;
 
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
@@ -17,4 +18,6 @@ public class ProductoPedidoDTO {
 
     public String getImagenUrl() { return imagenUrl; }
     public void setImagenUrl(String imagenUrl) { this.imagenUrl = imagenUrl; }
+    public String getTalla() { return talla; }
+    public void setTalla(String talla) { this.talla = talla; }
 }

@@ -4,4 +4,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="azul">#0620FF</color>
     <color name="lavender">#8692f7</color>
+    <color name="primaryText">#212121</color>
+    <color name="secondaryText">#757575</color>
+    <color name="background">#F5F5F5</color>
+    <color name="cardBackground">#FFFFFF</color>
+
+
 </resources>

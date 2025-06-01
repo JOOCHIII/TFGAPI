@@ -1,22 +1,65 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E3F2FD"
     android:padding="16dp">
 
-    <TextView android:id="@+id/tvFechaDetalle"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="Fecha:" android:textStyle="bold"/>
+    <!-- Card con detalles del pedido -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="#FFFFFF">
 
-    <TextView android:id="@+id/tvEstadoDetalle"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="Estado:"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
 
-    <TextView android:id="@+id/tvTotalDetalle"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="Total:"/>
+            <TextView
+                android:id="@+id/tvFechaDetalle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fecha: 01/06/2025"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="#0D47A1" />
 
+            <TextView
+                android:id="@+id/tvEstadoDetalle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Estado: Enviado"
+                android:textSize="14sp"
+                android:textColor="#1565C0"
+                android:layout_marginTop="6dp" />
+
+            <TextView
+                android:id="@+id/tvTotalDetalle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total: 50.00 €"
+                android:textSize="14sp"
+                android:textColor="#1565C0"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Lista de productos del pedido -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerDetallePedido"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:padding="8dp"
+        android:background="#FFFFFF"
+        android:elevation="2dp" />
 </LinearLayout>

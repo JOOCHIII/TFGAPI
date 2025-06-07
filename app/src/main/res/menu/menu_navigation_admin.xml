@@ -19,7 +19,7 @@
             android:title="Registrarse Admin"
             android:icon="@drawable/persona_admin" />
         <item
-            android:id="@+id/nav_gestion_pedidos"
+            android:id="@+id/gestion_pedidos_admin"
             android:title="Gestion de pedidos"
             android:icon="@drawable/gestion_pedidos" />
         <item

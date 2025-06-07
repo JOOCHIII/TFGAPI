@@ -77,11 +77,15 @@ public class MainActivityAdmin extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.content_frame, new Fragment_profile_admin())
                             .commit();
-                } else if (id == R.id.gestion_pedidos) {
+                } else if (id == R.id.gestion_pedidos_admin) {
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.content_frame, new GestionPedidos())
+                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
+                                    android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                            .replace(R.id.content_frame, new GestionPedidosAdmin())
+                            .addToBackStack(null)
                             .commit();
-                } else if (id == R.id.nav_admin) {
+                }
+                else if (id == R.id.nav_admin) {
                     getSupportFragmentManager().beginTransaction()
                             .setCustomAnimations(
                                     android.R.anim.slide_in_left,  // animación para entrada del fragmento nuevo

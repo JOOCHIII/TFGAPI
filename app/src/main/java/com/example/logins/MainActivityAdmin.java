@@ -77,6 +77,23 @@ public class MainActivityAdmin extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.content_frame, new Fragment_profile_admin())
                             .commit();
+                } else if (id == R.id.gestion_pedidos) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.content_frame, new GestionPedidos())
+                            .commit();
+                } else if (id == R.id.nav_admin) {
+                    getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(
+                                    android.R.anim.slide_in_left,  // animación para entrada del fragmento nuevo
+                                    android.R.anim.slide_out_right, // animación para salida del fragmento viejo
+                                    android.R.anim.slide_in_left,   // animación para entrada cuando haces popBackStack
+                                    android.R.anim.slide_out_right  // animación para salida cuando haces popBackStack
+                            )
+                            .replace(R.id.content_frame, new RegistroAdminActivity())
+                            .addToBackStack(null)
+                            .commit();
+
+
                 } else if (id == R.id.nav_logout_admin) {
                     Toast.makeText(MainActivityAdmin.this, "Cerrando sesión...", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(MainActivityAdmin.this, LoginAdminActivity.class);

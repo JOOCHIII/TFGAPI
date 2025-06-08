@@ -37,7 +37,6 @@ public class NotificationsFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerNotificaciones);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefresh);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new NotificacionesAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
@@ -56,27 +55,64 @@ public class NotificationsFragment extends Fragment {
 
     private void cargarNotificaciones() {
         swipeRefreshLayout.setRefreshing(true);
+        List<Notificacion> todas = new ArrayList<>();
 
         apiService.getNotificacionesUsuario(idUsuario, "tienda").enqueue(new Callback<List<Notificacion>>() {
             @Override
             public void onResponse(Call<List<Notificacion>> call, Response<List<Notificacion>> response) {
-                swipeRefreshLayout.setRefreshing(false);
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Notificacion> notificaciones = response.body();
-                    adapter.setNotificaciones(notificaciones);
-
-                    for (Notificacion noti : notificaciones) {
-                        marcarNotificacionLeida(noti.getId());
-                    }
-                } else {
-                    Toast.makeText(getContext(), "Error al cargar notificaciones", Toast.LENGTH_SHORT).show();
+                    todas.addAll(response.body());
                 }
+                cargarNotificacionesPedido(todas);
             }
 
             @Override
             public void onFailure(Call<List<Notificacion>> call, Throwable t) {
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(getContext(), "Error de conexión", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error cargando notificaciones", Toast.LENGTH_SHORT).show();
+                Log.e("NOTI", "Fallo al cargar notificaciones generales", t);
+            }
+        });
+    }
+
+    private void cargarNotificacionesPedido(List<Notificacion> acumuladas) {
+        apiService.getNotificacionesPedido(idUsuario).enqueue(new Callback<List<Notificacion>>() {
+            @Override
+            public void onResponse(Call<List<Notificacion>> call, Response<List<Notificacion>> response) {
+                swipeRefreshLayout.setRefreshing(false);
+
+                if (response.isSuccessful() && response.body() != null) {
+                    for (Notificacion n : response.body()) {
+                        // Forzar tipo "pedido" para estas notificaciones
+                        n.setTipo("pedido");
+                        acumuladas.add(n);
+                    }
+                }
+
+                List<Notificacion> noLeidas = new ArrayList<>();
+                for (Notificacion noti : acumuladas) {
+                    Log.d("NOTI", "Tipo notificación id " + noti.getId() + ": '" + noti.getTipo() + "'");
+                    if (!noti.isLeido()) {
+                        noLeidas.add(noti);
+
+                        // Marcar como leída antes de mostrarla
+                        if (noti.getTipo() != null && noti.getTipo().trim().equalsIgnoreCase("pedido")) {
+                            marcarNotificacionPedidoLeida(noti.getId());
+                        } else {
+                            marcarNotificacionLeida(noti.getId());
+                        }
+                    }
+                }
+
+                // Mostrar solo las no leídas (ya marcadas como leídas en backend)
+                adapter.setNotificaciones(noLeidas);
+            }
+
+            @Override
+            public void onFailure(Call<List<Notificacion>> call, Throwable t) {
+                swipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(getContext(), "Error cargando notificaciones de pedido", Toast.LENGTH_SHORT).show();
+                Log.e("NOTI", "Fallo al cargar notificaciones de pedido", t);
             }
         });
     }
@@ -86,13 +122,29 @@ public class NotificationsFragment extends Fragment {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
-                    Log.d("NOTI", "Notificación " + idNotificacion + " marcada como leída");
+                    Log.d("NOTI", "Notificación general " + idNotificacion + " marcada como leída");
                 }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Log.e("NOTI", "Error marcando notificación", t);
+                Log.e("NOTI", "Error marcando notificación general como leída", t);
+            }
+        });
+    }
+
+    private void marcarNotificacionPedidoLeida(int idNotificacion) {
+        apiService.marcarNotificacionPedidoLeida(idNotificacion).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    Log.d("NOTI", "Notificación de pedido " + idNotificacion + " marcada como leída");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.e("NOTI", "Error marcando notificación de pedido como leída", t);
             }
         });
     }

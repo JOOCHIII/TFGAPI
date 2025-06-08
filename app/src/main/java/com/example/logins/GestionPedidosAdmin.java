@@ -55,10 +55,15 @@ public class GestionPedidosAdmin extends Fragment {
 
                         @Override
                         public void onVerDetalles(PedidoAdmin pedido) {
-                            Toast.makeText(getContext(), "Pedido #" + pedido.getId() + "\n" +
-                                    "Usuario: " + pedido.getId_usuario() + "\n" +
-                                    "Total: $" + pedido.getTotal(), Toast.LENGTH_LONG).show();
+                            Fragment detalleFragment = DetallePedidoAdminFragment.newInstance(pedido.getId());
+                            requireActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.content_frame, detalleFragment) // ✅ CORRECTO
+                                    .addToBackStack(null)
+                                    .commit();
                         }
+
+
                     });
                     recyclerView.setAdapter(adapter);
                 } else {

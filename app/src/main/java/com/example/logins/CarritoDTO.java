@@ -22,7 +22,7 @@ public class CarritoDTO {
     @SerializedName("talla")
     private String talla;
 
-    @SerializedName("urlImagen")
+    @SerializedName("imgurl")
     private String imagenUrl;
 
     public CarritoDTO(long idProducto, String nombre, String descripcion, double precio,

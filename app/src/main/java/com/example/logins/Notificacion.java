@@ -1,5 +1,7 @@
 package com.example.logins;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Notificacion {
     private int id;
     private Integer idUsuario; // puede ser null para noti admins
@@ -7,6 +9,8 @@ public class Notificacion {
     private boolean leido;
     private String tipoDestino;
     private String fecha; // o Date, según como lo recibas de la API
+    private Long idReferencia; // id del reporte o del pedido
+    private String tipo;
 
     // Constructor vacío
     public Notificacion() {}
@@ -29,4 +33,21 @@ public class Notificacion {
 
     public String getFecha() { return fecha; }
     public void setFecha(String fecha) { this.fecha = fecha; }
+
+    public Long getIdReferencia() {
+        return idReferencia;
+    }
+
+    public void setIdReferencia(Long idReferencia) {
+        this.idReferencia = idReferencia;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
 }

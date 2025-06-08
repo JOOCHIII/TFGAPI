@@ -27,4 +27,12 @@ public interface ReportesNotisApi {
     @PUT("api/notificacion/{id}/leida")
     Call<String> marcarNotificacionLeida(@Path("id") int idNotificacion);
 
+    @GET("/api/notificacion-pedido/usuario")
+    Call<List<Notificacion>> getNotificacionesPedido(@Query("idUsuario") long id);
+
+    @PUT("/api/notificacion-pedido/{id}/leida")
+    Call<String> marcarNotificacionPedidoLeida(@Path("id") int idNotificacion);
+
+
+
 }

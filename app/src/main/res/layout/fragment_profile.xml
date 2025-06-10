@@ -1,92 +1,142 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="#F2F2F2"
+    android:padding="16dp">
 
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:background="#F2F2F2"
+        android:padding="16dp">
 
-        <!-- Título -->
-        <TextView
-            android:id="@+id/textViewTitleUsuario"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Perfil del Usuario"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:layout_gravity="center"
-            android:paddingBottom="20dp" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:elevation="4dp"
+            android:padding="24dp"
+            android:layout_margin="8dp"
+            android:clipToPadding="false"
+            android:backgroundTint="#FFFFFF">
 
-        <!-- Imagen -->
-        <ImageView
-            android:id="@+id/imageViewUsuario"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:layout_gravity="center"
-            android:src="@drawable/persona"
-            android:padding="12dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="8dp" />
 
-        <!-- Nombre completo -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nombre completo:"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:textColor="@android:color/black" />
+            <!-- Imagen centrada horizontalmente -->
+            <ImageView
+                android:id="@+id/imageViewAdmin"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/persona"
+                android:background="@drawable/circle_background"
+                android:padding="12dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="8dp" />
 
-        <TextView
-            android:id="@+id/textViewNombreUsuario"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="(nombre aquí)"
-            android:textSize="18sp"
-            android:paddingBottom="15dp"
-            android:textColor="@android:color/holo_blue_dark" />
+            <TextView
+                android:text="Perfil del Usuario"
+                android:layout_gravity="center"
+                android:textSize="22sp"
+                android:textColor="#333333"
+                android:textStyle="bold"
+                android:layout_marginBottom="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <!-- Correo -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Correo:"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:textColor="@android:color/black" />
+            <!-- Resto de campos y botones igual... -->
+            <!-- Nombre -->
+            <TextView android:text="Nombre completo"
+                android:textColor="#555"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/et_nombre_usuario"
+                android:enabled="false"
+                android:padding="12dp"
+                android:textColor="#000"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/textViewCorreoUsuario"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="(correo aquí)"
-            android:textSize="18sp"
-            android:paddingBottom="15dp"
-            android:textColor="@android:color/holo_blue_dark" />
+            <!-- Teléfono -->
+            <TextView android:text="Teléfono"
+                android:textColor="#555"
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/et_telefono_usuario"
+                android:enabled="false"
+                android:padding="12dp"
+                android:textColor="#000"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <!-- Teléfono -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Teléfono:"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:textColor="@android:color/black" />
+            <!-- Correo -->
+            <TextView android:text="Correo"
+                android:textColor="#555"
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/et_correo_usuario"
+                android:enabled="false"
+                android:padding="12dp"
+                android:textColor="#000"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/textViewTelefonoUsuario"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="(teléfono aquí)"
-            android:textSize="18sp"
-            android:paddingBottom="15dp"
-            android:textColor="@android:color/holo_blue_dark" />
+            <!-- Contraseña -->
+            <TextView android:text="Nueva Contraseña"
+                android:textColor="#555"
+                android:layout_marginTop="24dp"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/et_nueva_contrasena_usuario"
+                android:hint="Escribe nueva contraseña"
+                android:padding="12dp"
+                android:visibility="gone"
+                android:inputType="textPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <!-- Repetir Contraseña -->
+            <TextView
+                android:text="Repetir Contraseña"
+                android:textColor="#555"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/et_repetir_contrasena_usuario"
+                android:hint="Repite la contraseña"
+                android:padding="12dp"
+                android:inputType="textPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
 
+            <!-- Botón -->
+            <Button
+                android:id="@+id/btn_cambiar_contrasena_usuario"
+                android:text="Cambiar Contraseña"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#3F51B5"
+                android:visibility="gone"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

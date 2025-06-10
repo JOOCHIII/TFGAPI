@@ -3,7 +3,9 @@ package com.example.logins;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface UsuarioApi {
@@ -26,5 +28,7 @@ public interface UsuarioApi {
             @Field("contrasena") String contrasena,
             @Field("origen_app") String origenApp
     );
+    @GET("/api/usuarios/buscar/{usuario}")
+    Call<Usuario> getUsuarioPorNombre(@Path("usuario") String usuario);
 
 }

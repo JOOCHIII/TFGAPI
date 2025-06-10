@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
             } else if (id == R.id.nav_profile) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content_frame, new Fragment_profile())
+                        .replace(R.id.content_frame, new FragmentoPerfil())
                         .commit();
             } else if (id == R.id.nav_settings) {
                 getSupportFragmentManager().beginTransaction()

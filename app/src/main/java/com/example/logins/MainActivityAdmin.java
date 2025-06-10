@@ -3,6 +3,7 @@ package com.example.logins;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -96,9 +97,19 @@ public class MainActivityAdmin extends AppCompatActivity {
                             .replace(R.id.content_frame, new RegistroAdminActivity())
                             .addToBackStack(null)
                             .commit();
-
-
-                } else if (id == R.id.nav_logout_admin) {
+                } else if (id == R.id.nav_notificaciones_admin) {
+                    getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(
+                                    android.R.anim.slide_in_left,
+                                    android.R.anim.slide_out_right,
+                                    android.R.anim.slide_in_left,
+                                    android.R.anim.slide_out_right
+                            )
+                            .replace(R.id.content_frame, new NotificacionesFragmentAdmin())
+                            .addToBackStack(null)
+                            .commit();
+                }
+                else if (id == R.id.nav_logout_admin) {
                     Toast.makeText(MainActivityAdmin.this, "Cerrando sesión...", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(MainActivityAdmin.this, LoginAdminActivity.class);
                     startActivity(intent);
@@ -118,7 +129,29 @@ public class MainActivityAdmin extends AppCompatActivity {
         textoBienvenida_admin.setText("Bienvenido, " + nombreUsuarioAdmin);
 
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_home_admin, menu); // ← Aquí usas tu nuevo archivo
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.nav_notificaciones_admin) {
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(
+                            android.R.anim.slide_in_left,
+                            android.R.anim.slide_out_right,
+                            android.R.anim.slide_in_left,
+                            android.R.anim.slide_out_right
+                    )
+                    .replace(R.id.content_frame, new NotificacionesFragmentAdmin())
+                    .addToBackStack(null)
+                    .commit();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 
 

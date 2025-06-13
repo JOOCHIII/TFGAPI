@@ -55,27 +55,38 @@ public class MainActivity extends AppCompatActivity {
             if (id == R.id.nav_home) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame, new HomeFragment())
+                        .addToBackStack(null)
+
                         .commit();
             } else if (id == R.id.nav_profile) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame, new FragmentoPerfil())
+                        .addToBackStack(null)
+
                         .commit();
             } else if (id == R.id.nav_settings) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame, new SettingsFragment())
+                        .addToBackStack(null)
+
                         .commit();
 
             } else if (id == R.id.nav_reports) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame, new ReportsFragment())
+                        .addToBackStack(null)
+
                         .commit();
             } else if (id == R.id.nav_notifications) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame, new NotificationsFragment())
+                        .addToBackStack(null)
+
                         .commit();
             } else if (id == R.id.nav_my_orders) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame, new MisPedidosFragment())
+                        .addToBackStack(null)
                         .commit();
             } else if (id == R.id.nav_logout) {
                 Toast.makeText(MainActivity.this, "Cerrando sesión...", Toast.LENGTH_SHORT).show();

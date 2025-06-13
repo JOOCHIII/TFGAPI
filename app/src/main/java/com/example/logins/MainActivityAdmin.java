@@ -53,6 +53,8 @@ public class MainActivityAdmin extends AppCompatActivity {
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, new home_fragment_admin())
+                    .addToBackStack(null)
+
                     .commit();
             navigationView.setCheckedItem(R.id.nav_home_admin);
         }
@@ -66,6 +68,8 @@ public class MainActivityAdmin extends AppCompatActivity {
                 if (id == R.id.nav_home_admin) {
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.content_frame, new home_fragment_admin())
+                            .addToBackStack(null)
+
                             .commit();
                 } else if (id == R.id.nav_usuarios_admin) {
                     Toast.makeText(MainActivityAdmin.this, "Gestión de usuarios", Toast.LENGTH_SHORT).show();
@@ -73,10 +77,14 @@ public class MainActivityAdmin extends AppCompatActivity {
                 } else if (id == R.id.nav_settings_admin) {
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.content_frame, new SettingsFragment_admin())
+                            .addToBackStack(null)
+
                             .commit();
                 } else if (id == R.id.mi_perfil) {
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.content_frame, new Fragment_profile_admin())
+                            .addToBackStack(null)
+
                             .commit();
                 } else if (id == R.id.gestion_pedidos_admin) {
                     getSupportFragmentManager().beginTransaction()

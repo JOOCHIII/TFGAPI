@@ -52,8 +52,9 @@ public class MisPedidosFragment extends Fragment {
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.content_frame, detalleFragment)
-                    .addToBackStack(null)
+                    .addToBackStack(null) // <-- Esto es lo que permite volver atrás
                     .commit();
+
         });
 
         recyclerPedidos.setLayoutManager(new LinearLayoutManager(getContext()));

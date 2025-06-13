@@ -1,0 +1,73 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <EditText
+            android:id="@+id/etNombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre del producto" />
+
+        <EditText
+            android:id="@+id/etDescripcion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Descripción" />
+
+        <EditText
+            android:id="@+id/etPrecio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Precio"
+            android:inputType="numberDecimal" />
+
+        <EditText
+            android:id="@+id/etStock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Stock"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/etCategoria"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Categoría" />
+
+        <EditText
+            android:id="@+id/etFotos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="URLs de fotos (separadas por coma)" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerFotosPreview"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:padding="4dp"
+            android:background="#E0E0E0"/>
+
+        <CheckBox
+            android:id="@+id/checkDestacado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Producto destacado"
+            android:layout_marginTop="12dp" />
+
+        <Button
+            android:id="@+id/btnCrearProducto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Crear Producto"
+            android:layout_marginTop="24dp" />
+    </LinearLayout>
+</ScrollView>

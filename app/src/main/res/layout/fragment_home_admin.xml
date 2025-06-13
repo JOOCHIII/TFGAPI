@@ -57,7 +57,7 @@
                         android:id="@+id/tvTotalProducts"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Total Productos: 125"
+                        android:text="Total Productos: "
                         android:textSize="16sp"
                         android:textColor="#555555" />
 
@@ -65,7 +65,7 @@
                         android:id="@+id/tvDraftProducts"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="En Borrador: 5"
+                        android:text="En Borrador: "
                         android:textSize="16sp"
                         android:textColor="#555555"
                         android:paddingBottom="12dp" />
@@ -103,8 +103,8 @@
                     android:layout_height="80dp"
                     android:src="@drawable/persona"
                 android:contentDescription="Icono Productos"
-                android:tint="#888888"
-                android:layout_marginStart="8dp" />
+                    android:layout_marginStart="8dp"
+                    app:tint="#888888" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>

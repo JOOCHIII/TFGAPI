@@ -10,6 +10,7 @@ public class Productos implements Serializable {
     private String descripcion;
     private double precio;
     private List<FotoProducto> fotos;
+    private int stock;
 
     // Constructor vacío
     public Productos() {}
@@ -47,5 +48,13 @@ public class Productos implements Serializable {
             }
         }
         return urls;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 }

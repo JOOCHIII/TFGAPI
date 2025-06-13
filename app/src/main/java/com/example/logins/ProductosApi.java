@@ -14,4 +14,14 @@ public interface ProductosApi {
 
         @POST("/api/productos")
         Call<Productos> crearProducto(@Body Productos producto);
+
+        @POST("/api/productos/crear")
+        Call<Productos> crearProducto(@Body ProductoRequestDTO producto);
+
+        @GET("/api/productos/count")
+        Call<Long> contarProductos();
+
+        @GET("/api/productos/count/sin-stock")
+        Call<Long> contarProductosSinStock();
+
 }

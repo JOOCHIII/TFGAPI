@@ -85,8 +85,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="📋 Ver Todos"
-                        android:backgroundTint="?attr/colorSecondary"
-                        android:textColor="?attr/colorOnSecondary"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:textColor="?attr/colorOnPrimary"
                         android:layout_marginBottom="8dp" />
 
                 </LinearLayout>

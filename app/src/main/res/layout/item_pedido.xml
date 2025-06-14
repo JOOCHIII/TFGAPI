@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardCornerRadius="16dp"
-    app:cardElevation="6dp">
+    app:cardElevation="6dp"
+    android:background="?attr/colorSurface">
 
     <LinearLayout
         android:orientation="vertical"
@@ -19,7 +20,7 @@
             android:layout_height="wrap_content"
             android:text="Pedido #123"
             android:textStyle="bold"
-            android:textColor="@android:color/black"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="16sp"/>
 
         <TextView
@@ -27,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Fecha: 2024-05-30"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/blue_on_primary"
             android:textSize="14sp"
             android:layout_marginTop="4dp"/>
 
@@ -36,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Estado: Pendiente"
-            android:textColor="@android:color/holo_blue_dark"
+            android:textColor="@color/blue_on_primary"
             android:textSize="14sp"
             android:layout_marginTop="4dp"/>
 
@@ -45,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Total: 49.99 €"
-            android:textColor="@android:color/holo_green_dark"
+            android:textColor="@color/blue_on_primary"
             android:textStyle="bold"
             android:textSize="14sp"
             android:layout_marginTop="4dp"/>

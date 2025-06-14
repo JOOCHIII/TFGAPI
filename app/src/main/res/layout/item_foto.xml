@@ -1,6 +1,7 @@
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/imageViewFoto"
+<ImageView android:id="@+id/imageViewFoto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scaleType="centerCrop"
-    />
+    android:background="?attr/colorSurface"
+    android:contentDescription="Foto producto"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

@@ -1,7 +1,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="?attr/colorSurface">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,39 +14,57 @@
             android:id="@+id/etNombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nombre del producto" />
+            android:hint="Nombre del producto"
+            android:textColor="?attr/colorOnSurface"
+            android:textColorHint="?attr/colorOnSurface"
+            android:backgroundTint="@color/blue_on_surface" />
 
         <EditText
             android:id="@+id/etDescripcion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Descripción" />
+            android:hint="Descripción"
+            android:textColor="?attr/colorOnSurface"
+            android:textColorHint="?attr/colorOnSurface"
+            android:backgroundTint="?attr/colorPrimary" />
 
         <EditText
             android:id="@+id/etPrecio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Precio"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:textColor="?attr/colorOnSurface"
+            android:textColorHint="?attr/colorOnSurface"
+            android:backgroundTint="?attr/colorPrimary" />
 
         <EditText
             android:id="@+id/etStock"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Stock"
-            android:inputType="number" />
+            android:inputType="number"
+            android:textColor="?attr/colorOnSurface"
+            android:textColorHint="?attr/colorOnSurface"
+            android:backgroundTint="?attr/colorPrimary" />
 
         <EditText
             android:id="@+id/etCategoria"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Categoría" />
+            android:hint="Categoría"
+            android:textColor="?attr/colorOnSurface"
+            android:textColorHint="?attr/colorOnSurface"
+            android:backgroundTint="?attr/colorPrimary" />
 
         <EditText
             android:id="@+id/etFotos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="URLs de fotos (separadas por coma)" />
+            android:hint="URLs de fotos (separadas por coma)"
+            android:textColor="?attr/colorOnSurface"
+            android:textColorHint="?attr/colorOnSurface"
+            android:backgroundTint="?attr/colorPrimary" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerFotosPreview"
@@ -54,20 +73,24 @@
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
             android:padding="4dp"
-            android:background="#E0E0E0"/>
+            android:background="?attr/colorSurface"
+            />
 
         <CheckBox
             android:id="@+id/checkDestacado"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Producto destacado"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"
+            android:textColor="?attr/colorOnSurface" />
 
         <Button
             android:id="@+id/btnCrearProducto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Crear Producto"
-            android:layout_marginTop="24dp" />
+            android:layout_marginTop="24dp"
+            android:textColor="?attr/colorOnPrimary"
+            android:backgroundTint="?attr/colorPrimary" />
     </LinearLayout>
 </ScrollView>

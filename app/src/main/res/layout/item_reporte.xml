@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="6dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="3dp"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
     android:background="#E3F2FD">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="12dp">
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/textAsunto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Asunto"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#0D47A1" />
 
@@ -28,26 +28,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Descripción"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:textColor="#1976D2"
-            android:layout_marginTop="4dp" />
+            android:layout_marginTop="6dp" />
 
         <TextView
             android:id="@+id/textEstado"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Estado"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:textColor="#1976D2"
-            android:layout_marginTop="4dp" />
+            android:layout_marginTop="6dp" />
 
         <TextView
             android:id="@+id/textFecha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Fecha"
-            android:textSize="12sp"
+            android:textSize="13sp"
             android:textColor="#0D47A1"
-            android:layout_marginTop="6dp" />
+            android:layout_marginTop="10dp"
+            android:textStyle="italic" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

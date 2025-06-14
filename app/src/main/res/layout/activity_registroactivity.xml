@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:text="Registrarse"
                 android:textAlignment="center"
-                android:textColor="@color/design_default_color_secondary"
+                android:textColor="?attr/colorSecondary"
                 android:textSize="36sp"
                 android:textStyle="bold" />
 
@@ -48,8 +48,8 @@
                 android:hint="Nombre y Apellidos"
                 android:inputType="text|textPersonName"
                 android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHighlight="?attr/colorPrimary" />
 
             <EditText
                 android:id="@+id/txtemail"
@@ -63,8 +63,8 @@
                 android:hint="Correo Electronico"
                 android:inputType="text|textEmailAddress"
                 android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHighlight="?attr/colorPrimary" />
 
             <EditText
                 android:id="@+id/txttelefono"
@@ -78,8 +78,8 @@
                 android:hint="Telefono Movil"
                 android:inputType="phone"
                 android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHighlight="?attr/colorPrimary" />
 
             <EditText
                 android:id="@+id/txtusuario"
@@ -93,8 +93,8 @@
                 android:hint="Usuario"
                 android:inputType="text"
                 android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHighlight="?attr/colorPrimary" />
 
             <EditText
                 android:id="@+id/txtclave"
@@ -108,10 +108,9 @@
                 android:hint="Contraseña"
                 android:inputType="textPassword"
                 android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHighlight="?attr/colorPrimary" />
 
-            <!-- Nuevo campo para confirmar la contraseña -->
             <EditText
                 android:id="@+id/txtconfirmaclave"
                 android:layout_width="match_parent"
@@ -124,17 +123,18 @@
                 android:hint="Confirmar Contraseña"
                 android:inputType="textPassword"
                 android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHighlight="?attr/colorPrimary" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnregistrar"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="30dp"
-                android:backgroundTint="@color/azul"
+                android:backgroundTint="?attr/colorPrimary"
                 android:text="REGISTRAR"
                 android:textSize="18sp"
+                android:textColor="?attr/colorOnPrimary"
                 app:cornerRadius="20dp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -147,7 +147,7 @@
         android:padding="6dp"
         android:text="¿Ya Estas Registrado?"
         android:textAlignment="center"
-        android:textColor="#00EDD9"
+        android:textColor="?attr/colorSecondary"
         android:textSize="18sp" />
 
     <TextView
@@ -158,7 +158,6 @@
         android:padding="6dp"
         android:text="Inicia sesión"
         android:textAlignment="center"
-        android:textColor="#00EDD9"
+        android:textColor="?attr/colorSecondary"
         android:textSize="18sp" />
-
 </LinearLayout>

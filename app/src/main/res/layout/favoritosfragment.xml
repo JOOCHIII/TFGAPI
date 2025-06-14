@@ -3,14 +3,16 @@
     android:id="@+id/favoritosLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="?attr/colorSurface">
 
     <!-- RecyclerView para mostrar productos favoritos -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewFavoritos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:background="@android:color/transparent" />
 
     <!-- Texto si no hay favoritos -->
     <TextView
@@ -21,6 +23,5 @@
         android:textSize="16sp"
         android:layout_centerInParent="true"
         android:visibility="gone"
-        android:textColor="@android:color/darker_gray" />
-
+        android:textColor="?attr/colorOnSurface" />
 </RelativeLayout>

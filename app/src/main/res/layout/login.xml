@@ -10,95 +10,90 @@
     android:orientation="vertical"
     tools:context=".LoginActivity">
 
-<androidx.cardview.widget.CardView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="30dp"
-
-    android:background="@drawable/fondo_login"
-    app:cardElevation="20dp"
-    app:cardCornerRadius="30dp"
-    >
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_gravity="center_horizontal"
-    android:padding="24dp"
-    android:gravity="center_horizontal">
-
-    <TextView
-        android:id="@+id/textviewarriba"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="INICIO DE SESIÓN"
-        android:textAlignment="center"
-        android:textColor="#0620FF"
-        android:textColorLink="#000000"
-        android:textSize="34sp"
-        android:textStyle="bold">
+        android:layout_margin="30dp"
+        app:cardElevation="20dp"
+        app:cardCornerRadius="30dp"
+        android:background="?attr/colorSurface">
 
-    </TextView>
-    <EditText
-        android:id="@+id/usuario"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/marco"
-        android:drawableLeft="@drawable/persona"
-        android:hint="Usuario"
-        android:drawablePadding="10dp"
-        android:padding="8dp"
-        android:textStyle="bold"
-        android:ems="10"
-        android:inputType="text"
-        android:textColor="#000000"
-        tools:ignore="InvalidId" />
-    <EditText
-        android:id="@+id/contrasena"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/marco"
-        android:drawableLeft="@drawable/candado"
-        android:hint="Contraseña"
-        android:drawablePadding="10dp"
-        android:padding="8dp"
-        android:textStyle="bold"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:textColor="#000000"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:padding="24dp"
+            android:gravity="center_horizontal">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/botoniniciarsesion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:backgroundTint="#0620FF"
-        android:text="Iniciar Sesión"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        app:cornerRadius="20dp"
-        android:paddingVertical="10dp"
-        android:paddingHorizontal="20dp"/>
+            <TextView
+                android:id="@+id/textviewarriba"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="INICIO DE SESIÓN"
+                android:textAlignment="center"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="34sp"
+                android:textStyle="bold" />
 
+            <EditText
+                android:id="@+id/usuario"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/marco"
+                android:drawableLeft="@drawable/persona"
+                android:hint="Usuario"
+                android:drawablePadding="10dp"
+                android:padding="8dp"
+                android:textStyle="bold"
+                android:ems="10"
+                android:inputType="text"
+                android:textColor="?attr/colorOnBackground"
+                android:textColorHint="?attr/colorOnBackground" />
 
+            <EditText
+                android:id="@+id/contrasena"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/marco"
+                android:drawableLeft="@drawable/candado"
+                android:hint="Contraseña"
+                android:drawablePadding="10dp"
+                android:padding="8dp"
+                android:textStyle="bold"
+                android:ems="10"
+                android:inputType="textPassword"
+                android:textColor="?attr/colorOnBackground"
+                android:textColorHint="?attr/colorOnBackground" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botoniniciarsesion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="?attr/colorPrimary"
+                android:text="Iniciar Sesión"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="18sp"
+                app:cornerRadius="20dp"
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="20dp" />
 
+        </LinearLayout>
 
-</LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-</androidx.cardview.widget.CardView>
     <TextView
         android:id="@+id/notienecuenta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="¿Aun no tienes una cuenta?"
         android:textAlignment="center"
-        android:textColor="#D930CF"
+        android:textColor="?attr/colorSecondary"
         android:textSize="20sp"
-        android:layout_marginTop="10dp"
-        />
+        android:layout_marginTop="10dp" />
 
     <TextView
         android:id="@+id/textviewRegistro"
@@ -106,25 +101,20 @@
         android:layout_height="wrap_content"
         android:text="Registrarte Ahora"
         android:textAlignment="center"
-        android:textColor="#D930CF"
-        android:textColorLink="#000000"
+        android:textColor="?attr/colorSecondary"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginTop="5dp"
-        />
+        android:layout_marginTop="5dp" />
+
     <TextView
         android:id="@+id/textviewAdmin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Acceder como administrador"
         android:textAlignment="center"
-        android:textColor="#D930CF"
-        android:textColorLink="#000000"
+        android:textColor="?attr/colorSecondary"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginTop="5dp"
-        />
-
-
+        android:layout_marginTop="5dp" />
 
 </LinearLayout>

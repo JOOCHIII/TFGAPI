@@ -6,7 +6,7 @@
     android:layout_margin="12dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="6dp"
-    android:backgroundTint="#E3F2FD"> <!-- Azul muy claro -->
+    android:backgroundTint="?attr/colorSurface"> <!-- Fondo adaptado -->
 
     <LinearLayout
         android:orientation="horizontal"
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:padding="12dp"
         android:gravity="center_vertical"
-        android:foreground="?attr/selectableItemBackground"> <!-- Ripple en clic -->
+        android:foreground="?attr/selectableItemBackground"> <!-- Ripple -->
 
         <ImageView
             android:id="@+id/ivProducto"
@@ -39,7 +39,7 @@
                 android:text="Nombre producto"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                android:textColor="#0D47A1" /> <!-- Azul fuerte -->
+                android:textColor="@color/blue_on_surface" /> <!-- colorPrimary -->
 
             <TextView
                 android:id="@+id/tvCantidad"
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:text="Cantidad: 1"
                 android:textSize="14sp"
-                android:textColor="#1565C0" /> <!-- Azul medio -->
+                android:textColor="@color/blue_on_surface" /> <!-- colorPrimary -->
 
             <TextView
                 android:id="@+id/tvPrecio"
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:text="Precio: 10.00 €"
                 android:textSize="14sp"
-                android:textColor="#1565C0" />
+                android:textColor="@color/blue_on_surface" /> <!-- colorPrimary -->
 
             <TextView
                 android:id="@+id/tvTalla"
@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:text="Talla: M"
                 android:textSize="14sp"
-                android:textColor="#1565C0" />
+                android:textColor="@color/blue_on_surface" /> <!-- colorPrimary -->
         </LinearLayout>
 
     </LinearLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blue_primary">#64B5F6</color> <!-- Color principal -->
+    <color name="blue_on_primary">#E3F2FD</color> <!-- Texto sobre colorPrimary -->
+
+    <color name="blue_background">#1E2D3B</color> <!-- Fondo raíz de la app -->
+    <color name="blue_surface">#264359</color> <!-- Fondo para tarjetas, layouts, etc. -->
+
+    <color name="blue_on_background">#E3F2FD</color> <!-- Texto sobre background -->
+    <color name="blue_on_surface">#E3F2FD</color> <!-- Texto sobre surface -->
+    <color name="blue_secondary">#03DAC5</color> <!-- ejemplo -->
+    <color name="blue_on_secondary">#000000</color> <!-- texto sobre secondary -->
+
+</resources>

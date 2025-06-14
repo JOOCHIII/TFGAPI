@@ -1,13 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="azul">#0620FF</color>
-    <color name="lavender">#8692f7</color>
-    <color name="primaryText">#212121</color>
-    <color name="secondaryText">#757575</color>
-    <color name="background">#F5F5F5</color>
-    <color name="cardBackground">#FFFFFF</color>
-
+    <color name="blue_primary">#90CAF9</color>
+    <color name="blue_on_primary">#0D47A1</color>
+    <color name="blue_secondary">#64B5F6</color>
+    <color name="blue_on_secondary">#0D47A1</color>
+    <color name="blue_surface">#BBDEFB</color>
+    <color name="blue_on_surface">#0D47A1</color>
+    <color name="blue_background">#E3F2FD</color>
+    <color name="blue_on_background">#0D47A1</color>
 
 </resources>

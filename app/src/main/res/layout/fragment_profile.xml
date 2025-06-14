@@ -1,15 +1,14 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F2F2F2"
+    android:background="@color/blue_primary"
     android:padding="16dp">
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F2F2F2"
+        android:background="@color/blue_primary"
         android:padding="16dp">
 
         <LinearLayout
@@ -17,13 +16,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="#FFFFFF"
+            android:background="?attr/colorSurface"
             android:elevation="4dp"
             android:padding="24dp"
             android:layout_margin="8dp"
-            android:clipToPadding="false"
-            android:backgroundTint="#FFFFFF">
-
+            android:clipToPadding="false">
 
             <!-- Imagen centrada horizontalmente -->
             <ImageView
@@ -41,7 +38,7 @@
                 android:text="Perfil del Usuario"
                 android:layout_gravity="center"
                 android:textSize="22sp"
-                android:textColor="#333333"
+                android:textColor="?attr/colorOnSurface"
                 android:textStyle="bold"
                 android:layout_marginBottom="20dp"
                 android:layout_width="wrap_content"
@@ -49,21 +46,23 @@
 
             <!-- Resto de campos y botones igual... -->
             <!-- Nombre -->
-            <TextView android:text="Nombre completo"
-                android:textColor="#555"
+            <TextView
+                android:text="Nombre completo"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <EditText
                 android:id="@+id/et_nombre_usuario"
                 android:enabled="false"
                 android:padding="12dp"
-                android:textColor="#000"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <!-- Teléfono -->
-            <TextView android:text="Teléfono"
-                android:textColor="#555"
+            <TextView
+                android:text="Teléfono"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -71,13 +70,14 @@
                 android:id="@+id/et_telefono_usuario"
                 android:enabled="false"
                 android:padding="12dp"
-                android:textColor="#000"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <!-- Correo -->
-            <TextView android:text="Correo"
-                android:textColor="#555"
+            <TextView
+                android:text="Correo"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -85,13 +85,14 @@
                 android:id="@+id/et_correo_usuario"
                 android:enabled="false"
                 android:padding="12dp"
-                android:textColor="#000"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <!-- Contraseña -->
-            <TextView android:text="Nueva Contraseña"
-                android:textColor="#555"
+            <TextView
+                android:text="Nueva Contraseña"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginTop="24dp"
                 android:visibility="gone"
                 android:layout_width="match_parent"
@@ -107,7 +108,7 @@
             <!-- Repetir Contraseña -->
             <TextView
                 android:text="Repetir Contraseña"
-                android:textColor="#555"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginTop="16dp"
                 android:visibility="gone"
                 android:layout_width="match_parent"
@@ -119,18 +120,18 @@
                 android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <!-- Botón -->
             <Button
                 android:id="@+id/btn_cambiar_contrasena_usuario"
                 android:text="Cambiar Contraseña"
-                android:textColor="#FFFFFF"
+                android:textColor="?attr/colorOnPrimary"
                 android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#3F51B5"
-                android:visibility="gone"/>
+                android:backgroundTint="?attr/colorPrimary"
+                android:visibility="gone" />
 
             <View
                 android:layout_width="match_parent"

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E3F2FD"
+    android:background="?attr/colorSurface"
     android:padding="16dp">
 
     <LinearLayout
@@ -15,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_marginBottom="20dp"
-            android:background="#BBDEFB"
+            android:background="?attr/colorPrimaryContainer"
             android:elevation="4dp"
             android:clipToPadding="false"
             android:padding="8dp">
@@ -34,9 +35,9 @@
                 android:layout_margin="12dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="10dp"
-                android:tint="#64B5F6"
                 android:src="@drawable/ic_favorite_border"
-                android:contentDescription="Marcar como favorito" />
+                android:contentDescription="Marcar como favorito"
+                app:tint="@color/blue_on_background" />
         </FrameLayout>
 
         <TextView
@@ -46,7 +47,7 @@
             android:text="Nombre del producto"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="#0D47A1"
+            android:textColor="@color/blue_on_background"
             android:layout_marginTop="12dp" />
 
         <TextView
@@ -55,7 +56,7 @@
             android:layout_height="wrap_content"
             android:text="Descripción del producto"
             android:textSize="16sp"
-            android:textColor="#1976D2"
+            android:textColor="@color/blue_on_background"
             android:layout_marginTop="8dp" />
 
         <TextView
@@ -64,8 +65,8 @@
             android:layout_height="wrap_content"
             android:text="27,99 €"
             android:textSize="20sp"
-            android:textColor="#0B3D91"
             android:textStyle="bold"
+            android:textColor="@color/blue_on_background"
             android:layout_marginTop="16dp" />
 
         <Spinner
@@ -73,16 +74,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:backgroundTint="#90CAF9"
-            android:popupBackground="#BBDEFB" />
+            android:backgroundTint="?attr/colorPrimary"
+            android:popupBackground="?attr/colorPrimaryContainer" />
 
         <Button
             android:id="@+id/btnAgregarCesta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Añadir a mi cesta"
-            android:backgroundTint="#1565C0"
-            android:textColor="#FFFFFF"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textColor="?attr/colorOnPrimary"
             android:textStyle="bold"
             android:layout_marginTop="28dp"
             android:padding="12dp"

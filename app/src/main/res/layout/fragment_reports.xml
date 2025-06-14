@@ -4,14 +4,20 @@
     android:padding="16dp"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface">
 
     <!-- Formulario existente -->
     <EditText
         android:id="@+id/edtAsunto"
         android:hint="Asunto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:textColor="?attr/colorOnBackground"
+        android:textColorHint="?attr/colorOnBackground"
+        android:background="@drawable/edittext_border"
+        android:padding="12dp"
+        android:layout_marginBottom="8dp" />
 
     <EditText
         android:id="@+id/edtDescripcion"
@@ -20,14 +26,22 @@
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:minLines="3"
-        android:gravity="top"/>
+        android:gravity="top"
+        android:textColor="?attr/colorOnBackground"
+        android:textColorHint="?attr/colorOnBackground"
+        android:background="@drawable/edittext_border"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp" />
 
     <Button
         android:id="@+id/btnEnviarReporte"
         android:text="Enviar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="8dp"
+        android:backgroundTint="?attr/colorPrimary"
+        android:textColor="?attr/colorOnPrimary"
+        android:padding="12dp" />
 
     <!-- SwipeRefreshLayout envuelve el RecyclerView -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -36,12 +50,14 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginTop="16dp"
-        tools:ignore="MissingClass">
+        tools:ignore="MissingClass"
+        android:background="?attr/colorSurface">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvReportes"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:background="?attr/colorSurface" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>

@@ -4,7 +4,7 @@
     <item
         android:id="@+id/action_search"
         android:title="Buscar"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="@drawable/ic_find"
         app:showAsAction="always|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView" />
 
@@ -23,6 +23,6 @@
     <item
         android:id="@+id/action_favorites"
         android:title="Favoritos"
-        android:icon="@drawable/ic_favorite"
+        android:icon="@drawable/baseline_favorite_24"
         app:showAsAction="always" />
 </menu>

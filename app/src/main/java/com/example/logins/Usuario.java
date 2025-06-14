@@ -24,6 +24,7 @@ public class Usuario {
 
     @SerializedName("usuario")
     private String usuario;
+    private String Contrasena ;
 
     // getters y setters
 
@@ -46,5 +47,12 @@ public class Usuario {
 
     public String getUsuario() { return usuario; }
     public void setUsuario(String usuario) { this.usuario = usuario; }
+    public String getContrasena() {
+        return Contrasena;
+
+    }
+    public void setContrasena(String contrasena) {
+        Contrasena = contrasena;
+    }
 }
 

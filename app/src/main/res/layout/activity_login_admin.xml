@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:text="ADMINISTRADOR"
                 android:textAlignment="center"
-                android:textColor="#0620FF"
+                android:textColor="?attr/colorPrimary"
                 android:textSize="34sp"
                 android:textStyle="bold" />
 
@@ -49,7 +49,8 @@
                 android:textStyle="bold"
                 android:ems="10"
                 android:inputType="text"
-                android:textColor="#000000" />
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurface" />
 
             <EditText
                 android:id="@+id/contrasena_admin"
@@ -64,16 +65,17 @@
                 android:textStyle="bold"
                 android:ems="10"
                 android:inputType="textPassword"
-                android:textColor="#000000" />
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurface" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/boton_iniciar_sesion_admin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:backgroundTint="#0620FF"
+                android:backgroundTint="?attr/colorPrimary"
                 android:text="Iniciar Sesión"
-                android:textColor="#FFFFFF"
+                android:textColor="?attr/colorOnPrimary"
                 android:textSize="18sp"
                 app:cornerRadius="20dp"
                 android:paddingVertical="10dp"
@@ -89,12 +91,8 @@
         android:layout_height="wrap_content"
         android:text="Acceder como usuario"
         android:textAlignment="center"
-        android:textColor="#D930CF"
-        android:textColorLink="#000000"
+        android:textColor="?attr/colorSecondary"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginTop="5dp"
-        />
-
-
+        android:layout_marginTop="5dp" />
 </LinearLayout>

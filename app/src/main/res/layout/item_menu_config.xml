@@ -1,32 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="16dp"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:background="?attr/colorSurface">
 
-    <!-- Imagen y Título de la opción -->
+
     <ImageView
         android:id="@+id/icono"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/persona"/>
+        android:contentDescription="Icono perfil"
+        android:src="@drawable/persona"
+        app:tint="@color/blue_on_surface" />
 
+    <!-- Título -->
     <TextView
         android:id="@+id/titulo"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Perfil"
         android:textSize="16sp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:textColor="?attr/colorOnSurface" />
 
-    <!-- Espaciado entre título y Switch -->
+    <!-- Switch oculto -->
     <Switch
         android:id="@+id/switch_appearance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone" /> <!-- Invisible por defecto -->
-
+        android:visibility="gone" />
 </LinearLayout>

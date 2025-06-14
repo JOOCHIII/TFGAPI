@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:elevation="4dp">
+    app:cardCornerRadius="12dp"
+    app:cardElevation="6dp"
+    android:background="?attr/colorSurface">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,42 +18,70 @@
             android:id="@+id/tvPedidoIdAdmin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pedido #"
-            android:textStyle="bold"/>
+            android:text="Pedido #123"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="?attr/colorOnSurface" />
 
         <TextView
             android:id="@+id/tvPedidoFechaAdmin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fecha"/>
+            android:text="Fecha: 2024-05-30"
+            android:textColor="?attr/colorSecondary"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp" />
 
         <TextView
             android:id="@+id/tvPedidoTotalAdmin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Total"/>
+            android:text="Total: 99.99 €"
+            android:textColor="?attr/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="4dp" />
 
         <TextView
             android:id="@+id/tvPedidoUsuarioAdmin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Usuario"/>
+            android:text="Usuario: Juan Pérez"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp" />
 
         <Spinner
             android:id="@+id/spinnerEstadoAdmin"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="?attr/colorPrimary" />
 
         <Button
             android:id="@+id/btnActualizarEstadoAdmin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Actualizar Estado" />
+            android:text="Actualizar Estado"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textColor="?attr/colorOnPrimary"
+            android:textAllCaps="false"
+            android:padding="12dp"
+            android:elevation="4dp" />
 
         <Button
             android:id="@+id/btnVerDetallesAdmin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ver Detalles" />
+            android:text="Ver Detalles"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="?attr/colorSecondary"
+            android:textColor="?attr/colorOnSecondary"
+            android:textAllCaps="false"
+            android:padding="12dp"
+            android:elevation="4dp" />
+
     </LinearLayout>
+
 </androidx.cardview.widget.CardView>

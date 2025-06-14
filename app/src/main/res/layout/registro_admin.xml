@@ -5,7 +5,7 @@
     android:id="@+id/registro_admin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo_login"
+    android:background="?attr/colorSurface"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".RegistroActivity">
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
-        android:background="@drawable/fondo_login"
+        android:background="@color/blue_surface"
         app:cardElevation="20dp"
         app:cardCornerRadius="30dp">
 
@@ -32,10 +32,11 @@
                 android:layout_height="wrap_content"
                 android:text="Registrarse"
                 android:textAlignment="center"
-                android:textColor="@color/design_default_color_secondary"
+                android:textColor="?attr/colorSecondary"
                 android:textSize="36sp"
                 android:textStyle="bold" />
 
+            <!-- Campos EditText -->
             <EditText
                 android:id="@+id/txtnombreadmin"
                 android:layout_width="match_parent"
@@ -46,10 +47,10 @@
                 android:drawablePadding="8dp"
                 android:ems="10"
                 android:hint="Nombre y Apellidos"
-                android:inputType="text|textPersonName"
+                android:inputType="textPersonName"
                 android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHighlight="?attr/colorOnSurface" />
 
             <EditText
                 android:id="@+id/txtcorreoadmin"
@@ -60,11 +61,11 @@
                 android:drawableLeft="@drawable/baseline_email_24"
                 android:drawablePadding="8dp"
                 android:ems="10"
-                android:hint="Correo Electronico"
-                android:inputType="text|textEmailAddress"
+                android:hint="Correo Electrónico"
+                android:inputType="textEmailAddress"
                 android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHighlight="?attr/colorOnSurface" />
 
             <EditText
                 android:id="@+id/txttelefonoadmin"
@@ -75,11 +76,11 @@
                 android:drawableLeft="@drawable/baseline_local_phone_24"
                 android:drawablePadding="8dp"
                 android:ems="10"
-                android:hint="Telefono Movil"
+                android:hint="Teléfono Móvil"
                 android:inputType="phone"
                 android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHighlight="?attr/colorOnSurface" />
 
             <EditText
                 android:id="@+id/txtusuarioadmin"
@@ -93,8 +94,8 @@
                 android:hint="Usuario"
                 android:inputType="text"
                 android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHighlight="?attr/colorOnSurface" />
 
             <EditText
                 android:id="@+id/txtclaveadmin"
@@ -108,10 +109,9 @@
                 android:hint="Contraseña"
                 android:inputType="textPassword"
                 android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHighlight="?attr/colorOnSurface" />
 
-            <!-- Nuevo campo para confirmar la contraseña -->
             <EditText
                 android:id="@+id/txtrepetirclaveadmin"
                 android:layout_width="match_parent"
@@ -124,20 +124,20 @@
                 android:hint="Confirmar Contraseña"
                 android:inputType="textPassword"
                 android:padding="8dp"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background" />
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHighlight="?attr/colorOnSurface" />
 
             <Button
                 android:id="@+id/btnregistraradmin"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="30dp"
-                android:backgroundTint="@color/azul"
+                android:backgroundTint="?attr/colorPrimary"
                 android:text="REGISTRAR"
+                android:textColor="?attr/colorOnPrimary"
                 android:textSize="18sp"
                 app:cornerRadius="20dp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
 
 </LinearLayout>

@@ -1,14 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="?attr/colorSurface">
 
     <LinearLayout
         android:orientation="vertical"
         android:padding="20dp"
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content">
 
         <!-- Título -->
@@ -17,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Perfil de Administrador"
-            android:textColor="@android:color/black"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="26sp"
             android:textStyle="bold"
             android:layout_gravity="center"
@@ -41,7 +39,7 @@
             android:text="Nombre:"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:textColor="@android:color/black" />
+            android:textColor="?attr/colorOnBackground" />
 
         <TextView
             android:id="@+id/textViewNombreAdmin"
@@ -52,7 +50,7 @@
             android:text="(nombre aquí)"
             android:textSize="18sp"
             android:paddingBottom="15dp"
-            android:textColor="@android:color/holo_blue_dark" />
+            android:textColor="@color/blue_on_surface" />
 
         <!-- Correo -->
         <TextView
@@ -61,7 +59,7 @@
             android:text="Correo:"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:textColor="@android:color/black" />
+            android:textColor="?attr/colorOnBackground" />
 
         <TextView
             android:id="@+id/textViewCorreoAdmin"
@@ -70,11 +68,9 @@
             android:drawableLeft="@drawable/baseline_email_24"
             android:drawablePadding="8dp"
             android:text="correo aquí"
-            android:layout_gravity=""
-
             android:textSize="18sp"
             android:paddingBottom="15dp"
-            android:textColor="@android:color/holo_blue_dark" />
+            android:textColor="@color/blue_on_surface" />
 
         <!-- Teléfono -->
         <TextView
@@ -83,7 +79,7 @@
             android:text="Teléfono:"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:textColor="@android:color/black" />
+            android:textColor="?attr/colorOnBackground" />
 
         <TextView
             android:id="@+id/textViewTelefonoAdmin"
@@ -94,9 +90,7 @@
             android:text="(teléfono aquí)"
             android:textSize="18sp"
             android:paddingBottom="20dp"
-            android:textColor="@android:color/holo_blue_dark" />
-
-
+            android:textColor="@color/blue_on_surface" />
 
     </LinearLayout>
 </ScrollView>

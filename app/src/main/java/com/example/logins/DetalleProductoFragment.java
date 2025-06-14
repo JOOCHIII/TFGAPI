@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -39,10 +42,11 @@ public class DetalleProductoFragment extends Fragment {
 
     private long userId;
     private boolean esFavorito = false;
+
     public static DetalleProductoFragment newInstance(Productos producto) {
         DetalleProductoFragment fragment = new DetalleProductoFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_PRODUCTO, producto); // Asegúrate de que Productos implemente Serializable
+        args.putSerializable(ARG_PRODUCTO, producto);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,17 +54,15 @@ public class DetalleProductoFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true); // 👉 Activar el menú en este fragmento
+
         if (getArguments() != null) {
             producto = (Productos) getArguments().getSerializable(ARG_PRODUCTO);
         }
 
         SharedPreferences userPrefs = requireContext().getSharedPreferences("usuario_prefs", Context.MODE_PRIVATE);
         long idUsuarioGuardado = userPrefs.getLong("id_usuario", -1);
-        if (idUsuarioGuardado != -1) {
-            userId = idUsuarioGuardado;
-        } else {
-            userId = -1;
-        }
+        userId = (idUsuarioGuardado != -1) ? idUsuarioGuardado : -1;
     }
 
     @Override
@@ -90,7 +92,6 @@ public class DetalleProductoFragment extends Fragment {
             adapterTallas.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerTallas.setAdapter(adapterTallas);
 
-            // Cargar fotos con ViewPager2 y adapter
             List<String> listaUrlsFotos = producto.getUrlsFotos();
             if (listaUrlsFotos != null && !listaUrlsFotos.isEmpty()) {
                 FotosPagerAdapter adapterFotos = new FotosPagerAdapter(requireContext(), listaUrlsFotos);
@@ -100,9 +101,7 @@ public class DetalleProductoFragment extends Fragment {
 
         btnAgregarCesta.setOnClickListener(v -> {
             String tallaSeleccionada = spinnerTallas.getSelectedItem().toString();
-
             CarritoApi carritoApi = RetrofitClient.getRetrofitInstance().create(CarritoApi.class);
-
             Call<String> call = carritoApi.agregarAlCarrito(userId, producto.getId(), tallaSeleccionada, 1);
 
             call.enqueue(new Callback<String>() {
@@ -223,10 +222,37 @@ public class DetalleProductoFragment extends Fragment {
 
     private void actualizarIconoFavorito() {
         if (esFavorito) {
-            btnFavorito.setImageResource(R.drawable.ic_favorite); // icono corazón lleno
+            btnFavorito.setImageResource(R.drawable.ic_favorite);
         } else {
-            btnFavorito.setImageResource(R.drawable.ic_favorite_border
-                    ); // icono corazón borde
+            btnFavorito.setImageResource(R.drawable.ic_favorite_border);
         }
+    }
+
+    // 👉 MENÚ SUPERIOR (Toolbar derecho)
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_home, menu); // Usa el mismo menú que en HomeFragment
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_cart) {
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, new CarritoFragment())
+                    .addToBackStack(null)
+                    .commit();
+            return true;
+        } else if (id == R.id.action_favorites) {
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, new FavoritosFragment())
+                    .addToBackStack(null)
+                    .commit();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

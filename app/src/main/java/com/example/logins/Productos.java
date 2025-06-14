@@ -11,6 +11,7 @@ public class Productos implements Serializable {
     private double precio;
     private List<FotoProducto> fotos;
     private int stock;
+    private String categoria;
 
     // Constructor vacío
     public Productos() {}
@@ -56,5 +57,11 @@ public class Productos implements Serializable {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+    public String getCategoria() {
+        return categoria;
+    }
+    public void setCategoria(String  categoria) {
+        this.categoria = categoria;
     }
 }

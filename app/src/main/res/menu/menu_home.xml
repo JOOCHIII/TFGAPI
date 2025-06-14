@@ -1,21 +1,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/action_search"
         android:title="Buscar"
         android:icon="@android:drawable/ic_menu_search"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="ifRoom|collapseActionView" />
+        app:showAsAction="always|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+
+    <item
+        android:id="@+id/action_filter_category"
+        android:title="Categoría"
+        android:icon="@drawable/baseline_filter_list_alt_24"
+    app:showAsAction="always" />
 
     <item
         android:id="@+id/action_cart"
         android:title="Carrito"
         android:icon="@drawable/baseline_shopping_cart_24"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/action_favorites"
-        android:icon="@drawable/baseline_favorite_24"
-        android:title="Favoritos"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/action_favorites"
+        android:title="Favoritos"
+        android:icon="@drawable/ic_favorite"
+        app:showAsAction="always" />
 </menu>

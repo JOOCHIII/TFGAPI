@@ -19,17 +19,20 @@ import java.util.List;
 
 public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.ProductoViewHolder> implements Filterable {
 
-    private List<Productos> productosList;       // lista filtrada para mostrar
-    private List<Productos> productosListFull;   // copia original completa
+    private List<Productos> productosList;       // Lista actual (filtrada)
+    private List<Productos> productosListFull;   // Lista completa (original)
     private OnItemClickListener listener;
+
+    private String filtroTextoActual = "";       // Texto de búsqueda actual
+    private String categoriaSeleccionada = "Todos"; // Categoría actual
 
     public interface OnItemClickListener {
         void onItemClick(Productos producto);
     }
 
     public ProductosAdapter(List<Productos> productosList, OnItemClickListener listener) {
-        this.productosList = productosList;
-        this.productosListFull = new ArrayList<>(productosList); // copia para filtrar
+        this.productosList = new ArrayList<>(productosList);
+        this.productosListFull = new ArrayList<>(productosList);
         this.listener = listener;
     }
 
@@ -76,17 +79,17 @@ public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.Prod
     private Filter filtroProductos = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            List<Productos> listaFiltrada = new ArrayList<>();
-            if (constraint == null || constraint.length() == 0) {
-                listaFiltrada.addAll(productosListFull);
-            } else {
-                String filtroPatron = constraint.toString().toLowerCase().trim();
+            filtroTextoActual = constraint != null ? constraint.toString().toLowerCase().trim() : "";
 
-                for (Productos producto : productosListFull) {
-                    // Aquí filtramos por nombre del producto (puedes añadir más campos)
-                    if (producto.getNombre().toLowerCase().contains(filtroPatron)) {
-                        listaFiltrada.add(producto);
-                    }
+            List<Productos> listaFiltrada = new ArrayList<>();
+
+            for (Productos producto : productosListFull) {
+                boolean coincideTexto = producto.getNombre().toLowerCase().contains(filtroTextoActual);
+                boolean coincideCategoria = categoriaSeleccionada.equals("Todos") ||
+                        producto.getCategoria().equalsIgnoreCase(categoriaSeleccionada);
+
+                if (coincideTexto && coincideCategoria) {
+                    listaFiltrada.add(producto);
                 }
             }
 
@@ -102,6 +105,12 @@ public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.Prod
             notifyDataSetChanged();
         }
     };
+
+    // Método para filtrar por categoría desde el fragmento
+    public void filtrarPorCategoria(String categoria) {
+        this.categoriaSeleccionada = categoria;
+        getFilter().filter(filtroTextoActual); // Reaplica el filtro completo
+    }
 
     static class ProductoViewHolder extends RecyclerView.ViewHolder {
         TextView tvNombre, tvDescripcion, tvPrecio;

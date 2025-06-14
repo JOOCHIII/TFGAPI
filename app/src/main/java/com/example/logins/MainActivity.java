@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, new HomeFragment())
+                    .addToBackStack(null)
+
                     .commit();
             navigationView.setCheckedItem(R.id.nav_home);
         }

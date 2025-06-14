@@ -24,4 +24,7 @@ public interface ProductosApi {
         @GET("/api/productos/count/sin-stock")
         Call<Long> contarProductosSinStock();
 
+        @GET("/api/productos/categorias")
+        Call<List<String>> getCategorias();
+
 }

@@ -45,6 +45,8 @@ dependencies {
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
     implementation ("androidx.recyclerview:recyclerview:1.3.0")
     implementation ("com.squareup.picasso:picasso:2.8")
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
 
 
     implementation(libs.appcompat)

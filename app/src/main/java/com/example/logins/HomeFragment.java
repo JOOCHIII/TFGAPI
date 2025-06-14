@@ -2,6 +2,8 @@ package com.example.logins;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,11 +14,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -27,6 +31,7 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private ProductosAdapter adapter;
+    private List<Productos> listaProductos = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,9 +59,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Productos>> call, Response<List<Productos>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Productos> productos = response.body();
+                    listaProductos = response.body();
 
-                    adapter = new ProductosAdapter(productos, producto -> {
+                    adapter = new ProductosAdapter(listaProductos, producto -> {
                         DetalleProductoFragment fragment = DetalleProductoFragment.newInstance(producto);
                         requireActivity().getSupportFragmentManager()
                                 .beginTransaction()
@@ -131,10 +136,66 @@ public class HomeFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
             return true;
+
+        } else if (id == R.id.action_filter_category) {
+            cargarCategoriasDesdeApi();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    private void cargarCategoriasDesdeApi() {
+        ProductosApi apiService = RetrofitClient.getRetrofitInstance().create(ProductosApi.class);
+        Call<List<String>> call = apiService.getCategorias();
+
+        call.enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                int codigo = response.code();
+                List<String> categorias = response.body();
+
+                Log.d("CATEGORIAS", "Código respuesta: " + codigo);
+                Log.d("CATEGORIAS", "Cuerpo respuesta: " + categorias);
+
+                if (response.isSuccessful()) {
+                    if (categorias != null && !categorias.isEmpty()) {
+                        mostrarMenuCategorias(categorias);
+                    } else {
+                        Toast.makeText(getContext(), "No hay categorías disponibles", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Error al obtener categorías: " + codigo, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<String>> call, Throwable t) {
+                Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("CATEGORIAS", "onFailure: " + t.getMessage(), t);
+            }
+        });
+    }
+
+    private void mostrarMenuCategorias(List<String> categorias) {
+        View anchor = requireActivity().findViewById(R.id.action_filter_category);
+        PopupMenu popupMenu = new PopupMenu(getContext(), anchor);
+
+        popupMenu.getMenu().add("Todos"); // opción para mostrar todo
+
+        for (String categoria : categorias) {
+            popupMenu.getMenu().add(categoria);
+        }
+
+        popupMenu.setOnMenuItemClickListener(item -> {
+            String seleccion = item.getTitle().toString();
+            if (adapter != null) {
+                adapter.filtrarPorCategoria(seleccion);
+            }
+            return true;
+        });
+
+        popupMenu.show();
+    }
 
 }

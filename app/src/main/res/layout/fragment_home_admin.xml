@@ -29,7 +29,7 @@
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp"
             android:layout_marginBottom="16dp"
-            android:backgroundTint="?attr/colorSurface">
+            android:backgroundTint="@color/blue_secondary">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -60,7 +60,7 @@
                         android:layout_height="wrap_content"
                         android:text="Total Productos: 0"
                         android:textSize="16sp"
-                        android:textColor="?attr/colorOnSurfaceVariant" />
+                        android:textColor="@color/blue_on_primary" />
 
                     <TextView
                         android:id="@+id/tvDraftProducts"
@@ -68,7 +68,7 @@
                         android:layout_height="wrap_content"
                         android:text="En Borrador: 0"
                         android:textSize="16sp"
-                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textColor="@color/blue_on_primary"
                         android:paddingBottom="12dp" />
 
                     <Button
@@ -108,7 +108,7 @@
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp"
             android:layout_marginBottom="24dp"
-            android:backgroundTint="?attr/colorSurface">
+            android:backgroundTint="@color/blue_secondary">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -168,7 +168,7 @@
             android:id="@+id/barChartVentas"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:background="?attr/colorSurface"
+            android:background="@color/blue_secondary"
             android:padding="8dp" />
 
     </LinearLayout>

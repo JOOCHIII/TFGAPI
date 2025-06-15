@@ -10,28 +10,29 @@
             android:id="@+id/mi_perfil"
             android:title="Mi perfil"
             android:icon="@drawable/persona" />
-        <item
-            android:id="@+id/nav_usuarios_admin"
-            android:title="Usuarios"
-            android:icon="@drawable/baseline_people_24" />
-        <item
-            android:id="@+id/nav_admin"
-            android:title="Registrarse Admin"
-            android:icon="@drawable/persona_admin" />
-        <item
-            android:id="@+id/gestion_pedidos_admin"
-            android:title="Gestion de pedidos"
-            android:icon="@drawable/gestion_pedidos" />
-        <item
-            android:id="@+id/nav_settings_admin"
-            android:title="Configuración"
-            android:icon="@drawable/baseline_settings_24" />
+        <!--  <item
+              android:id="@+id/nav_usuarios_admin"
+              android:title="Usuarios"
+              android:icon="@drawable/baseline_people_24" />
+              -->
+          <item
+              android:id="@+id/nav_admin"
+              android:title="Registrarse Admin"
+              android:icon="@drawable/persona_admin" />
+          <item
+              android:id="@+id/gestion_pedidos_admin"
+              android:title="Gestion de pedidos"
+              android:icon="@drawable/gestion_pedidos" />
+          <item
+              android:id="@+id/nav_settings_admin"
+              android:title="Configuración"
+              android:icon="@drawable/baseline_settings_24" />
 
-        <item
-            android:id="@+id/nav_logout_admin"
-            android:title="Cerrar sesión"
-            android:icon="@drawable/baseline_exit_to_app_24" />
+          <item
+              android:id="@+id/nav_logout_admin"
+              android:title="Cerrar sesión"
+              android:icon="@drawable/baseline_exit_to_app_24" />
 
 
 
-</menu>
+  </menu>

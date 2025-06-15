@@ -71,9 +71,10 @@ public class MainActivityAdmin extends AppCompatActivity {
                             .addToBackStack(null)
 
                             .commit();
-                } else if (id == R.id.nav_usuarios_admin) {
-                    Toast.makeText(MainActivityAdmin.this, "Gestión de usuarios", Toast.LENGTH_SHORT).show();
-                    // Aquí puedes lanzar otro fragment o activity si quieres
+
+//                } else if (id == R.id.nav_usuarios_admin) {
+//                    Toast.makeText(MainActivityAdmin.this, "Gestión de usuarios", Toast.LENGTH_SHORT).show();
+//                    // Aquí puedes lanzar otro fragment o activity si quieres
                 } else if (id == R.id.nav_settings_admin) {
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.content_frame, new SettingsFragment_admin())

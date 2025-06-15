@@ -240,8 +240,9 @@ public class DetalleProductoFragment extends Fragment {
         int id = item.getItemId();
 
         if (id == R.id.action_cart) {
+            CarritoFragment carritoFragment = CarritoFragment.newInstance(userId);
             requireActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content_frame, new CarritoFragment())
+                    .replace(R.id.content_frame, carritoFragment)
                     .addToBackStack(null)
                     .commit();
             return true;

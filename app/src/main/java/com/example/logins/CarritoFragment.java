@@ -1,6 +1,9 @@
 package com.example.logins;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log; // <-- Importante
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +33,6 @@ public class CarritoFragment extends Fragment implements CarritoAdapter.OnCantid
     private Button btnTramitarPedido;
 
     private List<CarritoDTO> carrito;
-
     private CarritoAdapter adapter;
 
     private long idUsuario;
@@ -50,9 +52,17 @@ public class CarritoFragment extends Fragment implements CarritoAdapter.OnCantid
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Obtener ID de usuario desde argumentos o SharedPreferences como respaldo
         if (getArguments() != null) {
-            idUsuario = getArguments().getLong(ARG_ID_USUARIO);
+            idUsuario = getArguments().getLong(ARG_ID_USUARIO, -1);
         }
+        if (idUsuario == -1) {
+            SharedPreferences prefs = requireContext().getSharedPreferences("usuario_prefs", Context.MODE_PRIVATE);
+            idUsuario = prefs.getLong("id_usuario", -1);
+        }
+
+        Log.d("CarritoFragment", "ID de usuario: " + idUsuario);
     }
 
     @Nullable
@@ -73,16 +83,13 @@ public class CarritoFragment extends Fragment implements CarritoAdapter.OnCantid
 
         cargarCarritoDesdeApi();
 
-        btnTramitarPedido.setOnClickListener(v -> {
-            tramitarPedido();
-        });
+        btnTramitarPedido.setOnClickListener(v -> tramitarPedido());
 
         return view;
     }
 
     private void cargarCarritoDesdeApi() {
         CarritoApi apiService = RetrofitClient.getRetrofitInstance().create(CarritoApi.class);
-
         Call<List<CarritoDTO>> call = apiService.obtenerCarritoUsuario(idUsuario);
 
         call.enqueue(new Callback<List<CarritoDTO>>() {
@@ -121,6 +128,11 @@ public class CarritoFragment extends Fragment implements CarritoAdapter.OnCantid
     }
 
     private void tramitarPedido() {
+        if (idUsuario == -1) {
+            Toast.makeText(getContext(), "ID de usuario no válido", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         PedidoApi pedidoApi = RetrofitClient.getRetrofitInstance().create(PedidoApi.class);
         Call<Void> call = pedidoApi.tramitarPedido(idUsuario);
 
@@ -133,12 +145,15 @@ public class CarritoFragment extends Fragment implements CarritoAdapter.OnCantid
                     adapter.notifyDataSetChanged();
                     actualizarTotal();
                 } else {
-                    Toast.makeText(getContext(), "Error al tramitar pedido", Toast.LENGTH_SHORT).show();
+                    Log.e("CarritoFragment", "Error al tramitar pedido. Código: " + response.code());
+                    Log.e("CarritoFragment", "Mensaje: " + response.message());
+                    Toast.makeText(getContext(), "Error al tramitar pedido. Código: " + response.code(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("CarritoFragment", "Fallo en la petición: " + t.getMessage());
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

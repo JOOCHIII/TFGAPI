@@ -60,6 +60,6 @@
         android:layout_weight="1"
         android:clipToPadding="false"
         android:padding="8dp"
-        android:background="?attr/colorSurfaceVariant"
+        android:background="@color/blue_surface"
         android:elevation="2dp" />
 </LinearLayout>

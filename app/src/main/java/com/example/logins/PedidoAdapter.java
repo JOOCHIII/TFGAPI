@@ -40,7 +40,7 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
     public void onBindViewHolder(@NonNull PedidoViewHolder holder, int position) {
         Pedido pedido = listaPedidos.get(position);
         holder.tvPedidoId.setText("Pedido #" + pedido.getId());
-        holder.tvFecha.setText("Fecha: " + pedido.getFecha().substring(0, 10)); // Solo fecha (yyyy-MM-dd)
+        holder.tvFecha.setText("Fecha: " + pedido.getFecha().substring(0, 16).replace("T", " "));
         holder.tvEstado.setText("Estado: " + pedido.getEstado());
         holder.tvTotal.setText("Total: " + String.format("%.2f", pedido.getTotal()) + " €");
 

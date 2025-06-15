@@ -64,8 +64,8 @@ public class PedidoAdminAdapter extends RecyclerView.Adapter<PedidoAdminAdapter.
 
         public void bind(PedidoAdmin pedido, OnItemClickListener listener) {
             tvId.setText("Pedido #" + pedido.getId());
-            tvFecha.setText("Fecha: " + pedido.getFecha());
-            tvTotal.setText("Total: $" + pedido.getTotal());
+            tvFecha.setText("Fecha: " + pedido.getFecha().substring(0, 16).replace("T", " "));
+            tvTotal.setText("Total: " + pedido.getTotal()+"€");
             tvUsuario.setText("Usuario: " + pedido.getNombreUsuario());
 
             String[] estados = {"Pendiente", "En proceso", "Enviado", "Entregado", "Cancelado"};

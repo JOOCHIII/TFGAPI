@@ -64,7 +64,7 @@ public class DetallePedidoFragment extends Fragment {
             public void onResponse(Call<DetallePedidoResponse> call, Response<DetallePedidoResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     DetallePedidoResponse detalle = response.body();
-                    tvFecha.setText("Fecha: " + detalle.getFecha());
+                    tvFecha.setText("Fecha: " + detalle.getFecha().substring(0, 16).replace("T", " "));
                     tvEstado.setText("Estado: " + detalle.getEstado());
                     tvTotal.setText(String.format("Total: %.2f €", detalle.getTotal()));
 
